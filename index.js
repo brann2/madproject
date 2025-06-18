@@ -8,5 +8,6 @@ import Login from './Login';
 import Flexbox from './Flexbox';
 import SignIn from './SignIn';
 import Home from './Home';
+import App from './App';
 
-AppRegistry.registerComponent(appName, () => Home);
+AppRegistry.registerComponent(appName, () => App);

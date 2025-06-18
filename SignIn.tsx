@@ -1,85 +1,195 @@
-import {StyleSheet, TouchableOpacity, View, Text} from 'react-native';
-import React, {useState} from 'react';
-import Input from './components/InputField';
-import Button from './components/ButtonCustom';
-import Title from './components/Title';
+import React, { useState } from 'react';
+import { View, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
+import HeaderAuth from './components/HeaderAuth';
+import { useNavigation } from '@react-navigation/native';
 
-const SignIn = () => {
-  // let title = 'Welcome';
-  const [title, setTitle] = useState('Registration');
-  const [Name, setName] = useState('');
-  const [Username, setUsername] = useState('');
-  const [Email, setEmail] = useState('');
-  const [Address, setAddress] = useState('');
-  const [PhoneNumber, setPhoneNumber] = useState('');
-  const handleClick = () => {
-    // title = 'Selamat Datang';
-    setTitle('Selamat Datang');
-    const data = {
-      Name: Name,
-      username: Username,
-      Email: Email,
-      Address: Address,
-      PhoneNumber: PhoneNumber,
-    };
-    console.log(data);
-  };
-  const handleName = e => {
-    setName(e);
-  };
-  const handleUsername = e => {
-    setUsername(e);
-  };
-  const handleEmail = e => {
-    setEmail(e);
-  };
-  const handleAddress = e => {
-    setAddress(e);
-  };
-  const handlePhoneNumber = e => {
-    setPhoneNumber(e);
-  };
+const SignIn: React.FC = () => {
+  const [name, setName] = useState('');
+  const [dob, setDob] = useState('');
+  const [origin, setOrigin] = useState('');
+  const [phone, setPhone] = useState('');
+  const [code, setCode] = useState('');
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
-      <Title title={title} />
-      <Input
-        label="Name"
-        placeholder="Masukan nama lengkap anda"
-        onChangeText={handleName}
-      />
-      <Input
-        label="Username"
-        placeholder="Masukan username anda"
-        onChangeText={handleUsername}
-      />
-      <Input
-        label="Email"
-        placeholder="Masukan email anda"
-        onChangeText={handleEmail}
-      />
-      <Input
-        label="Address"
-        placeholder="Masukan alamat anda"
-        onChangeText={handleAddress}
-      />
-      <Input
-        label="Phone Number"
-        placeholder="Masukan Nomor telepon anda"
-        onChangeText={handlePhoneNumber}
-        keyboardType="numeric"
-      />
-      {/* <Input label="Address" placeholder="Masukan alamat anda" /> */}
-      <Button label="Register" onPress={handleClick} />
+      <HeaderAuth />
+      <View style={styles.formCard}>
+        <Text style={styles.title}>Sign Up</Text>
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Name</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="John Doe"
+            value={name}
+            onChangeText={setName}
+            placeholderTextColor="#888"
+          />
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Date Of Birth</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="18/07/2001"
+            value={dob}
+            onChangeText={setDob}
+            placeholderTextColor="#888"
+          />
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Origin</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Jakarta"
+            value={origin}
+            onChangeText={setOrigin}
+            placeholderTextColor="#888"
+          />
+        </View>
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Phone Number</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="087576343234"
+            value={phone}
+            onChangeText={setPhone}
+            placeholderTextColor="#888"
+          />
+        </View>
+        <View style={styles.codeRow}>
+          <TouchableOpacity style={styles.codeButton}>
+            <Text style={styles.codeButtonText}>Get Code</Text>
+          </TouchableOpacity>
+          <TextInput
+            style={styles.codeInput}
+            placeholder="578645"
+            value={code}
+            onChangeText={setCode}
+            placeholderTextColor="#888"
+          />
+        </View>
+        <TouchableOpacity style={styles.signUpButton}>
+          <Text style={styles.signUpButtonText}>Sign Up</Text>
+        </TouchableOpacity>
+        <Text style={styles.loginText}>
+          Already have an account?{' '}
+          <Text style={styles.loginLink} onPress={() => navigation.navigate('Login')}>
+            Login
+          </Text>
+        </Text>
+      </View>
     </View>
   );
 };
 
-export default SignIn;
-
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
     flex: 1,
-    margin: 20,
+    backgroundColor: '#fff',
+  },
+  formCard: {
+    backgroundColor: '#fff',
+    borderRadius: 32,
+    marginHorizontal: 16,
+    marginTop: -32,
+    padding: 28,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    elevation: 8,
+    alignItems: 'center',
+    zIndex: 2,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#222',
+    marginBottom: 28,
+    fontFamily: 'Poppins-Bold',
+    textAlign: 'center',
+  },
+  inputGroup: {
+    width: '100%',
+    marginBottom: 18,
+  },
+  label: {
+    fontSize: 13,
+    color: '#222',
+    fontWeight: 'bold',
+    marginBottom: 6,
+    fontFamily: 'Poppins-SemiBold',
+  },
+  input: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#BFC4CA',
+    borderRadius: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 15,
+    fontFamily: 'Poppins-Regular',
+    color: '#222',
+    backgroundColor: '#fff',
+  },
+  codeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 18,
+  },
+  codeButton: {
+    backgroundColor: '#BFC4CA',
+    borderRadius: 6,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    marginRight: 8,
+  },
+  codeButtonText: {
+    color: '#222',
+    fontWeight: 'bold',
+    fontSize: 15,
+    fontFamily: 'Poppins-Bold',
+  },
+  codeInput: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#BFC4CA',
+    borderRadius: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 15,
+    fontFamily: 'Poppins-Regular',
+    color: '#222',
+    backgroundColor: '#fff',
+  },
+  signUpButton: {
+    backgroundColor: '#BFC4CA',
+    borderRadius: 6,
+    paddingVertical: 12,
+    alignItems: 'center',
+    width: '100%',
+    marginTop: 8,
+    marginBottom: 18,
+  },
+  signUpButtonText: {
+    color: '#222',
+    fontWeight: 'bold',
+    fontSize: 17,
+    fontFamily: 'Poppins-Bold',
+  },
+  loginText: {
+    color: '#222',
+    fontSize: 13,
+    textAlign: 'center',
+    fontFamily: 'Poppins-Regular',
+  },
+  loginLink: {
+    color: '#174BA7',
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
+    fontFamily: 'Poppins-Bold',
   },
 });
+
+export default SignIn;
