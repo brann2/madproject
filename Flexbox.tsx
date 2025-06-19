@@ -1,5 +1,6 @@
 import {StyleSheet, Text, Image, View} from 'react-native';
 import React from 'react';
+import Logo from './src/assets/logo.svg';
 
 const Flexbox = () => {
   return (
@@ -10,10 +11,7 @@ const Flexbox = () => {
         <View style={styles.blackBox} />
       </View>
       <View style={styles.container}>
-        <Image
-          style={styles.Image}
-          source={require('./Gambar/logo-with-motto-3.png')}
-        />
+        <Logo width={100} height={100} />
       </View>
       <View style={styles.bottomContainer}>
         <View style={styles.blackBox} />
