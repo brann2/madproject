@@ -1,8 +1,17 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Dimensions, Image as RNImage } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import Svg, { Rect, Polygon } from 'react-native-svg';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  Image as RNImage,
+} from 'react-native';
+import TextInput from '../../components/molecules/TextInput';
+import Button from '../../components/atoms/Button';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import Svg, {Rect, Polygon} from 'react-native-svg';
 import LinearGradient from 'react-native-linear-gradient';
 import DaftarBukuIcon from '../../assets/daftarbuku.svg';
 import PeminjamanIcon from '../../assets/peminjaman.svg';
@@ -11,7 +20,7 @@ import BookCollectionIcon from '../../assets/bookcollection.svg';
 import FAQIcon from '../../assets/FAQ.svg';
 import HomeIcon from '../../assets/logo.svg';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 type RootStackParamList = {
   Main: undefined;
@@ -26,19 +35,22 @@ type RootStackParamList = {
 const faqData = [
   {
     question: 'Cara Meminjam Buku',
-    answer: '1. Pilih buku yang ingin dipinjam. 2. Klik tombol pinjam. 3. Konfirmasi peminjaman.'
+    answer:
+      '1. Pilih buku yang ingin dipinjam. 2. Klik tombol pinjam. 3. Konfirmasi peminjaman.',
   },
   {
     question: 'Cara Mengembalikan Buku',
-    answer: '1. Buka menu pengembalian. 2. Pilih buku yang ingin dikembalikan. 3. Konfirmasi pengembalian.'
+    answer:
+      '1. Buka menu pengembalian. 2. Pilih buku yang ingin dikembalikan. 3. Konfirmasi pengembalian.',
   },
   {
     question: 'Cara Cek riwayat peminjaman',
-    answer: '1. Masuk ke menu riwayat. 2. Lihat daftar buku yang pernah dipinjam.'
+    answer:
+      '1. Masuk ke menu riwayat. 2. Lihat daftar buku yang pernah dipinjam.',
   },
   {
     question: 'Cara Log Out',
-    answer: '1. Buka menu profil. 2. Klik tombol log out.'
+    answer: '1. Buka menu profil. 2. Klik tombol log out.',
   },
 ];
 
@@ -48,7 +60,7 @@ const FAQ = () => {
   const [search, setSearch] = useState('');
 
   const filteredFaq = faqData.filter(faq =>
-    faq.question.toLowerCase().includes(search.toLowerCase())
+    faq.question.toLowerCase().includes(search.toLowerCase()),
   );
 
   const user = {
@@ -62,33 +74,38 @@ const FAQ = () => {
         <Svg height={110} width={width} style={StyleSheet.absoluteFill}>
           <Rect x="0" y="0" width={width} height="110" fill="#0A2A66" />
           <Polygon points={`0,20 ${width},0 ${width},50 0,70`} fill="#174BA7" />
-          <Polygon points={`0,80 ${width},60 ${width},110 0,110`} fill="#174BA7" />
+          <Polygon
+            points={`0,80 ${width},60 ${width},110 0,110`}
+            fill="#174BA7"
+          />
         </Svg>
         <Text style={styles.headerTitle}>FAQ</Text>
-        <Text style={styles.headerSubtitle}>Pusat Bantuan Adventist Paal 2 Library</Text>
+        <Text style={styles.headerSubtitle}>
+          Pusat Bantuan Adventist Paal 2 Library
+        </Text>
       </View>
       {/* Search Bar */}
       <View style={styles.searchBarWrapper}>
         <TextInput
-          style={styles.searchBar}
           placeholder="Cari pertanyaan..."
           placeholderTextColor="#A0A0A0"
           value={search}
           onChangeText={setSearch}
+          inputStyle={styles.searchBar}
         />
       </View>
       {/* FAQ Accordion */}
-      <ScrollView contentContainerStyle={styles.faqList} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.faqList}
+        showsVerticalScrollIndicator={false}>
         {filteredFaq.map((item, idx) => (
           <View key={idx} style={styles.accordionItem}>
-            <TouchableOpacity
-              style={styles.accordionHeader}
+            <Button
+              title={item.question}
               onPress={() => setExpanded(expanded === idx ? null : idx)}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.accordionTitle}>{item.question}</Text>
-              <Text style={styles.accordionIcon}>{expanded === idx ? '\u25B2' : '\u25BC'}</Text>
-            </TouchableOpacity>
+              style={styles.accordionHeader}
+              textStyle={styles.accordionTitle}
+            />
             {expanded === idx && (
               <View style={styles.accordionContent}>
                 <Text style={styles.accordionAnswer}>{item.answer}</Text>
@@ -100,36 +117,31 @@ const FAQ = () => {
       {/* Bottom Navigation */}
       <LinearGradient
         colors={['rgba(255,255,255,0.9)', 'rgba(255,255,255,1)']}
-        style={styles.bottomNav}
-      >
-        <TouchableOpacity 
-          style={styles.navItem}
+        style={styles.bottomNav}>
+        <Button
+          title="Home"
           onPress={() => navigation.navigate('Home')}
-        >
-          <HomeIcon width={24} height={24} />
-          <Text style={styles.navText}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
           style={styles.navItem}
+          textStyle={styles.navText}
+        />
+        <Button
+          title="Book Collection"
           onPress={() => navigation.navigate('BookCollection')}
-        >
-          <BookCollectionIcon width={24} height={24} />
-          <Text style={styles.navText}>Book Collection</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.navItem, styles.activeNavItem]}
-          onPress={() => {}}
-        >
-          <FAQIcon width={24} height={24} />
-          <Text style={[styles.navText, styles.activeNavText]}>FAQ</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
           style={styles.navItem}
+          textStyle={styles.navText}
+        />
+        <Button
+          title="FAQ"
+          onPress={() => {}}
+          style={[styles.navItem, styles.activeNavItem]}
+          textStyle={[styles.navText, styles.activeNavText]}
+        />
+        <Button
+          title="Profile"
           onPress={() => navigation.navigate('Profile')}
-        >
-          <ProfileIcon width={24} height={24} />
-          <Text style={styles.navText}>Profile</Text>
-        </TouchableOpacity>
+          style={styles.navItem}
+          textStyle={styles.navText}
+        />
       </LinearGradient>
     </View>
   );
@@ -188,7 +200,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     shadowColor: '#000',
     shadowOpacity: 0.06,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowRadius: 4,
     elevation: 1,
   },
@@ -203,11 +215,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15,
     color: '#222',
-  },
-  accordionIcon: {
-    fontSize: 16,
-    color: '#174BA7',
-    marginLeft: 8,
   },
   accordionContent: {
     paddingHorizontal: 16,
@@ -267,4 +274,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FAQ; 
+export default FAQ;

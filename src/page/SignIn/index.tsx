@@ -1,82 +1,112 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
-import HeaderAuth from '../../../components/HeaderAuth';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-
-type RootStackParamList = {
-  Main: undefined;
-  Login: undefined;
-  SignUp: undefined;
-  Home: undefined;
-};
+import React, {useState} from 'react';
+import {View, StyleSheet, Text, Image} from 'react-native';
+import TextInput from '../../components/molecules/TextInput';
+import Button from '../../components/atoms/Button';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import Logo from '../../assets/logo.svg';
 
 const SignIn: React.FC = () => {
   const [name, setName] = useState('');
   const [dob, setDob] = useState('');
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   return (
-    <View style={styles.container}>
-      <HeaderAuth />
-      <View style={styles.formCard}>
-        <Text style={styles.title}>Login</Text>
+    <View style={styles.root}>
+      {/* Header biru dengan logo dan welcome */}
+      <View style={styles.headerBlue}>
+        <Logo width={80} height={80} style={styles.logo} />
+        <Text style={styles.welcome}>
+          Welcome! to{'\n'}Adventist Paal 2{'\n'}Library
+        </Text>
+      </View>
+      {/* Card putih membulat */}
+      <View style={styles.card}>
+        <Text style={styles.signInTitle}>Sign In</Text>
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Name</Text>
           <TextInput
-            style={styles.input}
+            label="Name"
             placeholder="John Doe"
             value={name}
             onChangeText={setName}
-            placeholderTextColor="#BFC4CA"
+            inputStyle={styles.input}
+            labelStyle={styles.label}
           />
         </View>
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Date Of Birth</Text>
           <TextInput
-            style={styles.input}
+            label="Date Of Birth"
             placeholder="18/07/2001"
             value={dob}
             onChangeText={setDob}
-            placeholderTextColor="#BFC4CA"
+            inputStyle={styles.input}
+            labelStyle={styles.label}
           />
         </View>
-        <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('Home')}>
-          <Text style={styles.loginButtonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-          <Text style={styles.linkText}>Belum punya akun? Daftar</Text>
-        </TouchableOpacity>
+        <Button
+          title="Sign In"
+          onPress={() => navigation.navigate('Home')}
+          style={styles.signInButton}
+          textStyle={styles.signInButtonText}
+        />
+        <Text style={styles.signupText}>
+          Don't have an account?{' '}
+          <Text
+            style={styles.signupLink}
+            onPress={() => navigation.navigate('SignUp')}>
+            Sign Up
+          </Text>
+        </Text>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#E5E5E5',
   },
-  formCard: {
-    backgroundColor: '#fff',
-    borderRadius: 32,
-    marginHorizontal: 16,
-    marginTop: -32,
-    padding: 28,
-    shadowColor: '#174BA7',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.10,
-    shadowRadius: 24,
-    elevation: 12,
+  headerBlue: {
+    backgroundColor: '#174BA7',
     alignItems: 'center',
-    zIndex: 2,
+    paddingTop: 40,
+    paddingBottom: 24,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
   },
-  title: {
-    fontSize: 28,
+  logo: {
+    marginBottom: 8,
+  },
+  welcome: {
+    color: '#fff',
+    fontSize: 22,
     fontWeight: 'bold',
-    color: '#174BA7',
-    marginBottom: 28,
-    fontFamily: 'Poppins-Bold',
+    textAlign: 'center',
+    marginBottom: 8,
+    lineHeight: 28,
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    marginTop: -24,
+    paddingHorizontal: 24,
+    paddingTop: 32,
+    paddingBottom: 32,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.1,
+    shadowRadius: 16,
+    elevation: 8,
+    flex: 1,
+  },
+  signInTitle: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#222',
+    marginBottom: 24,
     textAlign: 'center',
   },
   inputGroup: {
@@ -88,45 +118,41 @@ const styles = StyleSheet.create({
     color: '#222',
     fontWeight: 'bold',
     marginBottom: 6,
-    fontFamily: 'Poppins-SemiBold',
   },
   input: {
     width: '100%',
     borderWidth: 1,
-    borderColor: '#E3E6ED',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    borderColor: '#222',
+    borderRadius: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
     fontSize: 15,
-    fontFamily: 'Poppins-Regular',
     color: '#222',
     backgroundColor: '#fff',
   },
-  loginButton: {
-    backgroundColor: '#174BA7',
-    borderRadius: 16,
-    paddingVertical: 14,
+  signInButton: {
+    backgroundColor: '#BFC4CA',
+    borderRadius: 6,
+    paddingVertical: 12,
     alignItems: 'center',
     width: '100%',
     marginTop: 8,
     marginBottom: 18,
-    shadowColor: '#174BA7',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 12,
-    elevation: 8,
   },
-  loginButtonText: {
-    color: '#fff',
+  signInButtonText: {
+    color: '#222',
     fontWeight: 'bold',
     fontSize: 17,
-    fontFamily: 'Poppins-Bold',
   },
-  linkText: {
+  signupText: {
+    color: '#222',
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  signupLink: {
     color: '#174BA7',
     fontWeight: 'bold',
     textDecorationLine: 'underline',
-    fontFamily: 'Poppins-Bold',
   },
 });
 

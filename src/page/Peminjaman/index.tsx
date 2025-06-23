@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView, TextInput } from 'react-native';
-import Svg, { Rect, Polygon } from 'react-native-svg';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet, Dimensions, ScrollView} from 'react-native';
+import TextInput from '../../components/molecules/TextInput';
+import Button from '../../components/atoms/Button';
+import Svg, {Rect, Polygon} from 'react-native-svg';
 import ArrowBack from '../../assets/Vector7.svg';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const Peminjaman = () => {
   const navigation = useNavigation();
@@ -19,59 +21,77 @@ const Peminjaman = () => {
       <View style={styles.headerGradient}>
         <Svg height={140} width={width} style={StyleSheet.absoluteFill}>
           <Rect x="0" y="0" width={width} height="140" fill="#0A2A66" />
-          <Polygon points={`0,30 ${width},0 ${width},80 0,120`} fill="#174BA7" />
-          <Polygon points={`0,110 ${width},90 ${width},140 0,140`} fill="#174BA7" />
+          <Polygon
+            points={`0,30 ${width},0 ${width},80 0,120`}
+            fill="#174BA7"
+          />
+          <Polygon
+            points={`0,110 ${width},90 ${width},140 0,140`}
+            fill="#174BA7"
+          />
         </Svg>
-        <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <ArrowBack width={26} height={26} />
-        </TouchableOpacity>
+        <Button
+          title="Back"
+          onPress={() => navigation.goBack()}
+          style={styles.backBtn}
+          textStyle={{color: '#174BA7', fontWeight: 'bold'}}
+        />
         <Text style={styles.headerTitle}>Formulir Peminjaman</Text>
       </View>
       <View style={styles.contentWrapper}>
-        <ScrollView contentContainerStyle={styles.formWrapper} keyboardShouldPersistTaps="handled">
+        <ScrollView
+          contentContainerStyle={styles.formWrapper}
+          keyboardShouldPersistTaps="handled">
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Nama</Text>
             <TextInput
-              style={styles.input}
+              label="Nama"
               value={nama}
               onChangeText={setNama}
               placeholder=""
               placeholderTextColor="#BFC4CA"
+              inputStyle={styles.input}
+              labelStyle={styles.label}
             />
           </View>
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Tanggal Peminjaman</Text>
             <TextInput
-              style={styles.input}
+              label="Tanggal Peminjaman"
               value={tglPinjam}
               onChangeText={setTglPinjam}
               placeholder=""
               placeholderTextColor="#BFC4CA"
+              inputStyle={styles.input}
+              labelStyle={styles.label}
             />
           </View>
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Tanggal Pengembalian</Text>
             <TextInput
-              style={styles.input}
+              label="Tanggal Pengembalian"
               value={tglKembali}
               onChangeText={setTglKembali}
               placeholder=""
               placeholderTextColor="#BFC4CA"
+              inputStyle={styles.input}
+              labelStyle={styles.label}
             />
           </View>
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Judul Buku</Text>
             <TextInput
-              style={styles.input}
+              label="Judul Buku"
               value={judul}
               onChangeText={setJudul}
               placeholder=""
               placeholderTextColor="#BFC4CA"
+              inputStyle={styles.input}
+              labelStyle={styles.label}
             />
           </View>
-          <TouchableOpacity style={styles.submitBtn}>
-            <Text style={styles.submitBtnText}>Pinjam</Text>
-          </TouchableOpacity>
+          <Button
+            title="Pinjam"
+            onPress={() => {}}
+            style={styles.submitBtn}
+            textStyle={styles.submitBtnText}
+          />
         </ScrollView>
       </View>
     </View>
@@ -159,4 +179,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Peminjaman; 
+export default Peminjaman;

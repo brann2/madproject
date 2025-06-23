@@ -1,18 +1,23 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
-import Svg, { Rect, Polygon } from 'react-native-svg';
+import {View, Text, StyleSheet, Dimensions, ScrollView} from 'react-native';
+import Button from '../../components/atoms/Button';
+import Svg, {Rect, Polygon} from 'react-native-svg';
 import ArrowBack from '../../assets/Vector7.svg';
 import NotifIcon from '../../assets/notif.svg';
 import VectorIcon from '../../assets/Vector.svg';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const Settings = () => {
   const navigation = useNavigation();
   const settingsOptions = [
-    { label: 'Notification Setting', icon: NotifIcon, onPress: () => navigation.navigate('NotificationSettings') },
-    { label: 'Delete Account', icon: VectorIcon, onPress: () => {} },
+    {
+      label: 'Notification Setting',
+      icon: NotifIcon,
+      onPress: () => navigation.navigate('NotificationSettings'),
+    },
+    {label: 'Delete Account', icon: VectorIcon, onPress: () => {}},
   ];
   return (
     <View style={styles.container}>
@@ -20,28 +25,32 @@ const Settings = () => {
       <View style={styles.headerGradient}>
         <Svg height={140} width={width} style={StyleSheet.absoluteFill}>
           <Rect x="0" y="0" width={width} height="140" fill="#0A2A66" />
-          <Polygon points={`0,30 ${width},0 ${width},80 0,120`} fill="#174BA7" />
-          <Polygon points={`0,110 ${width},90 ${width},140 0,140`} fill="#174BA7" />
+          <Polygon
+            points={`0,30 ${width},0 ${width},80 0,120`}
+            fill="#174BA7"
+          />
+          <Polygon
+            points={`0,110 ${width},90 ${width},140 0,140`}
+            fill="#174BA7"
+          />
         </Svg>
-        <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <ArrowBack width={26} height={26} />
-        </TouchableOpacity>
+        <Button
+          title="Back"
+          onPress={() => navigation.goBack()}
+          style={styles.backBtn}
+          textStyle={{color: '#174BA7', fontWeight: 'bold'}}
+        />
         <Text style={styles.headerTitle}>Settings</Text>
       </View>
       <ScrollView contentContainerStyle={styles.optionsWrapper}>
         {settingsOptions.map((item, idx) => (
-          <TouchableOpacity
+          <Button
             key={item.label}
-            style={styles.optionItem}
-            activeOpacity={0.7}
+            title={item.label}
             onPress={item.onPress}
-          >
-            <View style={styles.iconWrapper}>
-              <item.icon width={22} height={22} />
-            </View>
-            <Text style={styles.optionLabel}>{item.label}</Text>
-            <Text style={styles.optionArrow}>{'>'}</Text>
-          </TouchableOpacity>
+            style={styles.optionItem}
+            textStyle={styles.optionLabel}
+          />
         ))}
       </ScrollView>
     </View>
@@ -97,24 +106,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#F0F0F0',
   },
-  iconWrapper: {
-    width: 32,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 16,
-  },
   optionLabel: {
     flex: 1,
     fontSize: 16,
     color: '#222',
     fontWeight: '500',
   },
-  optionArrow: {
-    fontSize: 18,
-    color: '#1E90FF',
-    marginLeft: 8,
-    fontWeight: 'bold',
-  },
 });
 
-export default Settings; 
+export default Settings;
