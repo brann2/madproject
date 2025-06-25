@@ -1,14 +1,25 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, ScrollView, Dimensions, TouchableOpacity, StatusBar, Image as RNImage } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import Svg, { Rect, Polygon } from 'react-native-svg';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  ScrollView,
+  Dimensions,
+  StatusBar,
+  Image as RNImage,
+  TouchableOpacity,
+} from 'react-native';
+import Button from '../../components/atoms/Button';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import Svg, {Rect, Polygon} from 'react-native-svg';
 import Logo from '../../assets/logo.svg';
 import ProfileAvatar from '../../assets/profile.svg';
-import Image22 from '../../assets/image 22.svg';
-import Image23 from '../../assets/image 23.svg';
+import Image22 from '../../../src/assets/image 22.svg';
+import Image23 from '../../../src/assets/image 23.svg';
 import Image24 from '../../assets/image 24.svg';
-import Image25 from '../../assets/image25.svg';
+import Image25 from '../../../src/assets/image25.svg';
 import Image27 from '../../assets/images 27 1.svg';
 import PeminjamanIcon from '../../assets/peminjaman.svg';
 import PengembalianIcon from '../../assets/pengembalian.svg';
@@ -17,9 +28,10 @@ import RiwayatPeminjamanIcon from '../../assets/riwayatpeminjaman.svg';
 import LinearGradient from 'react-native-linear-gradient';
 import BookCollectionIcon from '../../assets/bookcollection.svg';
 import FAQIcon from '../../assets/FAQ.svg';
-import ProfileIcon from '../../assets/Vector.svg';
+import ProfileIcon from '../../assets/profile.svg';
+import HomeIcon from '../../assets/logo.svg';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 type RootStackParamList = {
   Main: undefined;
@@ -35,363 +47,379 @@ type RootStackParamList = {
 };
 
 const bookImages = [
-  { Svg: Image22, title: 'Matematika' },
-  { Svg: Image23, title: 'IPA' },
-  { Svg: Image25, title: 'Bahasa Indonesia' },
-  { Svg: Image27, title: 'Cut Nyak Dien' },
+  {Svg: Image22, title: 'Matematika'},
+  {Svg: Image23, title: 'IPA'},
+  {Svg: Image25, title: 'Bahasa Indonesia'},
+  {Svg: Image27, title: 'Cut Nyak Dien'},
 ];
 
 const menuItems = [
-  { icon: PeminjamanIcon, label: 'Peminjaman' },
-  { icon: PengembalianIcon, label: 'Pengembalian' },
-  { icon: DaftarBukuIcon, label: 'Daftar Buku' },
-  { icon: RiwayatPeminjamanIcon, label: 'Riwayat Peminjaman' },
+  {icon: PeminjamanIcon, label: 'Peminjaman', nav: 'Peminjaman'},
+  {icon: PengembalianIcon, label: 'Pengembalian', nav: 'Pengembalian'},
+  {icon: DaftarBukuIcon, label: 'Daftar Buku', nav: 'BookCollection'},
+  {
+    icon: RiwayatPeminjamanIcon,
+    label: 'Riwayat Peminjaman',
+    nav: 'RiwayatPinjam',
+  },
 ];
 
-const user = {
-  avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
+const newArrivals = [
+  {Svg: Image22, title: 'Matematika', isFirst: true},
+  {Svg: Image23, title: 'IPA'},
+  {Svg: Image25, title: 'Bahasa Indonesia'},
+];
+
+const borrowedBook = {
+  Svg: Image23,
+  title: 'BUKU IPA (SMP)',
+  author: 'TIM ABDI GURU',
+  borrowDate: '12/10/2024',
+  returnDate: '14/10/2024',
 };
+
+const avatarUrl = 'https://randomuser.me/api/portraits/men/1.jpg';
 
 const Home = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   return (
-    <View style={styles.container}>
-      <LinearGradient
-        colors={['#0A2A66', '#174BA7']}
-        style={styles.container}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-      >
-        <StatusBar barStyle="light-content" backgroundColor="#0A2A66" />
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          {/* Header Section */}
-          <View style={styles.headerGradient}>
-            <Svg height={280} width={width} style={StyleSheet.absoluteFill}>
-              <Rect x="0" y="0" width={width} height="280" fill="#0A2A66" />
-              <Polygon points={`0,40 ${width},0 ${width},60 0,100`} fill="#174BA7" />
-              <Polygon points={`0,120 ${width},80 ${width},140 0,180`} fill="#174BA7" />
-            </Svg>
-            
-            {/* Header Content */}
-            <View style={styles.headerContent}>
-              <View style={styles.headerTopRow}>
-                <Logo width={48} height={48} style={{ marginLeft: 8 }} />
-                <Text style={styles.libraryName}>Adventist Paal 2 Library</Text>
+    <View style={styles.root}>
+      <StatusBar barStyle="light-content" backgroundColor="#174BA7" />
+      {/* Header biru dengan logo, teks, dan avatar */}
+      <View style={styles.headerBlue}>
+        <Logo width={48} height={48} style={styles.logo} />
+        <View style={styles.headerTextWrap}>
+          <Text style={styles.headerTitle}>Adventist Paal 2 Library</Text>
+          <Text style={styles.headerHi}>Hi, John</Text>
+        </View>
+        <View style={styles.avatar}>
+          <ProfileIcon width={38} height={38} />
+        </View>
+      </View>
+      {/* Card menu overlap, rounded besar, shadow */}
+      <View style={styles.menuCard}>
+        <FlatList
+          data={menuItems}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={item => item.label}
+          contentContainerStyle={styles.menuList}
+          renderItem={({item}) => (
+            <TouchableOpacity style={styles.menuItemWrapper}>
+              <View style={styles.menuIconCircle}>
+                <item.icon width={28} height={28} />
               </View>
+              <Text style={styles.menuLabel}>{item.label}</Text>
+            </TouchableOpacity>
+          )}
+        />
+      </View>
+      <ScrollView style={{flex: 1}} contentContainerStyle={{paddingBottom: 90}}>
+        {/* New arrivals */}
+        <Text style={styles.sectionTitle}>New arrivals</Text>
+        <FlatList
+          data={newArrivals}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={item => item.title}
+          contentContainerStyle={styles.arrivalsList}
+          renderItem={({item}) => (
+            <View style={styles.arrivalCard}>
+              <item.Svg width={110} height={150} style={styles.arrivalImage} />
+              {item.isFirst && (
+                <TouchableOpacity style={styles.plusButton}>
+                  <Text style={styles.plusText}>+</Text>
+                </TouchableOpacity>
+              )}
+              <Text style={styles.arrivalTitle}>{item.title}</Text>
+            </View>
+          )}
+        />
+        {/* Previously Borrowed */}
+        <Text style={styles.sectionTitle}>Previously Borrowed</Text>
+        <View style={styles.borrowedCard}>
+          <borrowedBook.Svg
+            width={60}
+            height={90}
+            style={styles.borrowedImage}
+          />
+          <View style={styles.borrowedInfo}>
+            <View style={styles.borrowedRow}>
+              <Text style={styles.borrowedLabel}>Judul Buku</Text>
+              <Text style={styles.borrowedValue}>{borrowedBook.title}</Text>
+            </View>
+            <View style={styles.borrowedRow}>
+              <Text style={styles.borrowedLabel}>Penulis</Text>
+              <Text style={styles.borrowedValue}>{borrowedBook.author}</Text>
+            </View>
+            <View style={styles.borrowedRow}>
+              <Text style={styles.borrowedLabel}>Tanggal Dipinjam</Text>
+              <Text style={styles.borrowedValue}>
+                {borrowedBook.borrowDate}
+              </Text>
+            </View>
+            <View style={styles.borrowedRow}>
+              <Text style={styles.borrowedLabel}>Tanggal Dikembalikan</Text>
+              <Text style={styles.borrowedValue}>
+                {borrowedBook.returnDate}
+              </Text>
             </View>
           </View>
-
-          {/* Content Area (White Background) */}
-          <View style={styles.contentArea}>
-            {/* Menu Horizontal */}
-            <View style={styles.menuContainer}>
-              <FlatList
-                data={menuItems}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.menuList}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    style={styles.menuItem}
-                    onPress={() => {
-                      if (item.label === 'Peminjaman') {
-                        navigation.navigate('Peminjaman');
-                      } else if (item.label === 'Pengembalian') {
-                        navigation.navigate('Pengembalian');
-                      } else if (item.label === 'Riwayat Peminjaman') {
-                        navigation.navigate('RiwayatPinjam');
-                      }
-                    }}
-                  >
-                    <View style={styles.menuIcon}>
-                      <item.icon width={32} height={32} />
-                    </View>
-                    <Text style={styles.menuLabel}>{item.label}</Text>
-                  </TouchableOpacity>
-                )}
-                keyExtractor={(item) => item.label}
-              />
-            </View>
-
-            {/* New Arrivals */}
-            <View style={styles.sectionTitleRow}>
-              <Text style={styles.sectionTitle}>New arrivals</Text>
-              <Text style={styles.seeAll}>See All</Text>
-            </View>
-            <View style={styles.sliderWrapper}>
-              <FlatList
-                data={bookImages}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={(_, idx) => idx.toString()}
-                contentContainerStyle={styles.bookList}
-                renderItem={({ item }) => (
-                  <View style={styles.bookCard}>
-                    <item.Svg width={100} height={150} />
-                    <Text style={styles.bookTitle}>{item.title}</Text>
-                  </View>
-                )}
-              />
-            </View>
-
-            {/* Previously Borrowed */}
-            <Text style={styles.sectionTitle}>Previously Borrowed</Text>
-            <View style={styles.borrowedCard}>
-              <Image23 width={60} height={90} />
-              <View style={{ marginLeft: 12 }}>
-                <Text style={styles.borrowedTitle}>Judul Buku: IPA SMP</Text>
-                <Text style={styles.borrowedDetail}>Penulis: TIM ABDI GURU</Text>
-                <Text style={styles.borrowedDetail}>Tanggal Dipinjam: 12/10/2024</Text>
-                <Text style={styles.borrowedDetail}>Tanggal Dikembalikan: 14/10/2024</Text>
-              </View>
-            </View>
-          </View>
-        </ScrollView>
-      </LinearGradient>
-      
+        </View>
+      </ScrollView>
       {/* Bottom Navigation */}
-      <LinearGradient
-        colors={['rgba(255,255,255,0.9)', 'rgba(255,255,255,1)']}
-        style={styles.bottomNav}
-      >
-        <TouchableOpacity 
-          style={[styles.navItem, styles.activeNavItem]}
-          onPress={() => {}}
-        >
-          <Logo width={24} height={24} />
+      <View style={styles.bottomNav}>
+        <TouchableOpacity style={[styles.navItem, styles.activeNavItem]}>
+          <HomeIcon width={24} height={24} />
           <Text style={[styles.navText, styles.activeNavText]}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.navItem}
-          onPress={() => navigation.navigate('BookCollection')}
-        >
+          onPress={() => navigation.navigate('BookCollection')}>
           <BookCollectionIcon width={24} height={24} />
           <Text style={styles.navText}>Book Collection</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.navItem}
-          onPress={() => navigation.navigate('FAQ')}
-        >
+          onPress={() => navigation.navigate('FAQ')}>
           <FAQIcon width={24} height={24} />
           <Text style={styles.navText}>FAQ</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.navItem}
-          onPress={() => navigation.navigate('Profile')}
-        >
+          onPress={() => navigation.navigate('Profile')}>
           <ProfileIcon width={24} height={24} />
           <Text style={styles.navText}>Profile</Text>
         </TouchableOpacity>
-      </LinearGradient>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { 
+  root: {
     flex: 1,
+    backgroundColor: '#E5E5E5',
   },
-  headerGradient: {
-    paddingTop: StatusBar.currentHeight || 0,
-    height: 280,
-    position: 'relative',
-    overflow: 'hidden',
-  },
-  headerContent: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    zIndex: 1,
-  },
-  headerTopRow: {
+  headerBlue: {
+    backgroundColor: '#174BA7',
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 16,
-    marginBottom: 16,
+    paddingTop: 40,
+    paddingBottom: 18,
+    paddingHorizontal: 20,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    zIndex: 10,
   },
-  avatarImage: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 3,
+  logo: {
+    marginRight: 12,
   },
-  libraryName: { 
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginLeft: 12,
-    marginBottom: 0,
-  },
-  greeting: { 
-    color: '#fff',
-    fontSize: 16,
-    marginBottom: 24,
-  },
-  contentArea: {
+  headerTextWrap: {
     flex: 1,
-    backgroundColor: '#F7F9FB',
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    marginTop: -30,
-    paddingTop: 20,
-    paddingBottom: 80,
-  },
-  menuContainer: {
-    marginBottom: 20,
-  },
-  menuList: {
-    paddingHorizontal: 20,
-  },
-  menuItem: {
-    alignItems: 'center',
-    marginRight: 24,
-  },
-  menuIcon: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 8,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 3,
   },
-  menuLabel: { 
-    color: '#333',
-    fontSize: 12,
-    fontWeight: '500',
-    textAlign: 'center',
-  },
-  sectionTitleRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    marginBottom: 16,
-  },
-  sectionTitle: { 
+  headerTitle: {
+    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
+    marginBottom: 2,
   },
-  seeAll: { 
+  headerHi: {
+    color: '#fff',
     fontSize: 14,
-    color: '#174BA7',
-    textDecorationLine: 'underline',
   },
-  sliderWrapper: {
+  avatar: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    borderWidth: 2,
+    borderColor: '#fff',
+    marginLeft: 10,
+  },
+  menuCard: {
     backgroundColor: '#fff',
-    paddingVertical: 16,
-    marginBottom: 24,
+    borderRadius: 28,
+    marginHorizontal: 16,
+    marginTop: -28,
+    paddingVertical: 18,
+    paddingHorizontal: 8,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 2,
+    zIndex: 2,
   },
-  bookList: { 
-    paddingHorizontal: 20,
+  menuList: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  bookCard: {
-    width: 140,
-    height: 200,
-    backgroundColor: '#174BA7',
-    borderRadius: 20,
-    marginRight: 20,
+  menuItemWrapper: {
+    alignItems: 'center',
+    marginHorizontal: 16,
+  },
+  menuIconCircle: {
+    width: 54,
+    height: 54,
+    borderRadius: 27,
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 6,
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
     shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 8,
-    elevation: 4,
-    paddingTop: 8,
+    shadowOpacity: 0.04,
+    shadowOffset: {width: 0, height: 1},
+    shadowRadius: 2,
+    elevation: 1,
   },
-  bookTitle: {
-    color: '#fff',
+  menuLabel: {
+    fontSize: 12,
+    color: '#222',
     fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#222',
+    marginTop: 24,
+    marginLeft: 20,
+    marginBottom: 12,
+  },
+  arrivalsList: {
+    paddingLeft: 16,
+    paddingBottom: 8,
+  },
+  arrivalCard: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    marginRight: 16,
+    alignItems: 'center',
+    width: 140,
+    padding: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.06,
+    shadowOffset: {width: 0, height: 2},
+    shadowRadius: 4,
+    elevation: 1,
+    position: 'relative',
+  },
+  arrivalImage: {
+    width: 110,
+    height: 150,
+    borderRadius: 10,
+    marginBottom: 8,
+    resizeMode: 'cover',
+  },
+  plusButton: {
+    position: 'absolute',
+    left: 8,
+    bottom: 8,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#174BA7',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 2,
+  },
+  plusText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: -2,
+  },
+  arrivalTitle: {
     fontSize: 14,
-    marginTop: 0,
+    color: '#222',
+    fontWeight: 'bold',
     textAlign: 'center',
   },
   borrowedCard: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    marginHorizontal: 16,
+    marginTop: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    marginHorizontal: 20,
-    marginTop: 32,
-    padding: 16,
+    padding: 14,
     shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 3,
+    shadowOpacity: 0.06,
+    shadowOffset: {width: 0, height: 2},
+    shadowRadius: 4,
+    elevation: 1,
   },
-  borrowedTitle: { 
-    fontWeight: 'bold',
-    fontSize: 14,
-    marginBottom: 4,
-    color: '#333',
+  borrowedImage: {
+    width: 60,
+    height: 90,
+    borderRadius: 8,
+    marginRight: 14,
+    resizeMode: 'cover',
   },
-  borrowedDetail: { 
-    fontSize: 12,
-    color: '#666',
+  borrowedInfo: {
+    flex: 1,
+  },
+  borrowedRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 2,
+  },
+  borrowedLabel: {
+    fontSize: 12,
+    color: '#888',
+    fontWeight: 'bold',
+    marginRight: 8,
+  },
+  borrowedValue: {
+    fontSize: 13,
+    color: '#222',
+    fontWeight: 'bold',
+    flex: 1,
+    textAlign: 'right',
   },
   bottomNav: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 18,
+    borderTopRightRadius: 18,
     paddingVertical: 8,
-    paddingHorizontal: 16,
-    backgroundColor: 'white',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: -4,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 10,
+    paddingHorizontal: 8,
     position: 'absolute',
-    bottom: 0,
     left: 0,
     right: 0,
+    bottom: 0,
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOpacity: 0.06,
+    shadowOffset: {width: 0, height: -2},
+    shadowRadius: 4,
+    elevation: 8,
   },
   navItem: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 8,
     flex: 1,
+    marginHorizontal: 4,
+    backgroundColor: 'transparent',
+    borderRadius: 10,
+    paddingVertical: 6,
+    alignItems: 'center',
   },
   activeNavItem: {
-    backgroundColor: 'rgba(23, 75, 167, 0.1)',
-    borderRadius: 12,
+    backgroundColor: '#E5F0FF',
   },
   navText: {
+    color: '#174BA7',
+    fontWeight: 'bold',
     fontSize: 12,
-    color: '#666',
-    marginTop: 4,
+    textAlign: 'center',
+    marginTop: 2,
   },
   activeNavText: {
     color: '#174BA7',
-    fontWeight: '600',
-  },
-  navAvatar: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#eee',
-    resizeMode: 'cover',
+    fontWeight: 'bold',
   },
 });
 
-export default Home; 
+export default Home;

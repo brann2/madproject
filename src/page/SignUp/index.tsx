@@ -1,116 +1,137 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
-import HeaderAuth from '../../../components/HeaderAuth';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-
-type RootStackParamList = {
-  Main: undefined;
-  Login: undefined;
-  SignUp: undefined;
-};
+import React, {useState} from 'react';
+import {View, StyleSheet, Text} from 'react-native';
+import TextInput from '../../components/molecules/TextInput';
+import Button from '../../components/atoms/Button';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import Logo from '../../assets/logo.svg';
 
 const SignUp: React.FC = () => {
   const [name, setName] = useState('');
   const [dob, setDob] = useState('');
-  const [origin, setOrigin] = useState('');
+  const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [code, setCode] = useState('');
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   return (
-    <View style={styles.container}>
-      <HeaderAuth />
-      <View style={styles.formCard}>
-        <Text style={styles.title}>Sign Up</Text>
+    <View style={styles.root}>
+      {/* Header biru dengan logo dan welcome */}
+      <View style={styles.headerBlue}>
+        <Logo width={80} height={80} style={styles.logo} />
+        <Text style={styles.welcome}>
+          Welcome! to{'\n'}Adventist Paal 2 Library
+        </Text>
+      </View>
+      {/* Card putih membulat */}
+      <View style={styles.card}>
+        <Text style={styles.signUpTitle}>Sign Up</Text>
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Name</Text>
           <TextInput
-            style={styles.input}
+            label="Name"
             placeholder="John Doe"
             value={name}
             onChangeText={setName}
-            placeholderTextColor="#888"
+            inputStyle={styles.input}
+            labelStyle={styles.label}
           />
         </View>
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Date Of Birth</Text>
           <TextInput
-            style={styles.input}
+            label="Date Of Birth"
             placeholder="18/07/2001"
             value={dob}
             onChangeText={setDob}
-            placeholderTextColor="#888"
+            inputStyle={styles.input}
+            labelStyle={styles.label}
           />
         </View>
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Origin</Text>
           <TextInput
-            style={styles.input}
-            placeholder="Jakarta"
-            value={origin}
-            onChangeText={setOrigin}
-            placeholderTextColor="#888"
+            label="Email"
+            placeholder="your@email.com"
+            value={email}
+            onChangeText={setEmail}
+            inputStyle={styles.input}
+            labelStyle={styles.label}
+            keyboardType="email-address"
+            autoCapitalize="none"
           />
         </View>
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Phone Number</Text>
           <TextInput
-            style={styles.input}
-            placeholder="087576343234"
+            label="Phone Number"
+            placeholder="08xxxxxxxxxx"
             value={phone}
             onChangeText={setPhone}
-            placeholderTextColor="#888"
+            inputStyle={styles.input}
+            labelStyle={styles.label}
+            keyboardType="phone-pad"
           />
         </View>
-        <View style={styles.codeRow}>
-          <TouchableOpacity style={styles.codeButton}>
-            <Text style={styles.codeButtonText}>Get Code</Text>
-          </TouchableOpacity>
-          <TextInput
-            style={styles.codeInput}
-            placeholder="578645"
-            value={code}
-            onChangeText={setCode}
-            placeholderTextColor="#888"
-          />
-        </View>
-        <TouchableOpacity style={styles.signUpButton}>
-          <Text style={styles.signUpButtonText}>Sign Up</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.linkText}>Sudah punya akun? Login</Text>
-        </TouchableOpacity>
+        <Button
+          title="Sign Up"
+          onPress={() => {}}
+          style={styles.signUpButton}
+          textStyle={styles.signUpButtonText}
+        />
+        <Text style={styles.loginText}>
+          Already have an account?{' '}
+          <Text
+            style={styles.loginLink}
+            onPress={() => navigation.navigate('Login')}>
+            Login
+          </Text>
+        </Text>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#E5E5E5',
   },
-  formCard: {
+  headerBlue: {
+    backgroundColor: '#174BA7',
+    alignItems: 'center',
+    paddingTop: 40,
+    paddingBottom: 24,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+  },
+  logo: {
+    marginBottom: 8,
+  },
+  welcome: {
+    color: '#fff',
+    fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 8,
+    lineHeight: 28,
+  },
+  card: {
     backgroundColor: '#fff',
-    borderRadius: 32,
-    marginHorizontal: 16,
-    marginTop: -32,
-    padding: 28,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    marginTop: -24,
+    paddingHorizontal: 24,
+    paddingTop: 32,
+    paddingBottom: 32,
+    alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.1,
     shadowRadius: 16,
     elevation: 8,
-    alignItems: 'center',
-    zIndex: 2,
+    flex: 1,
   },
-  title: {
-    fontSize: 28,
+  signUpTitle: {
+    fontSize: 26,
     fontWeight: 'bold',
     color: '#222',
-    marginBottom: 28,
-    fontFamily: 'Poppins-Bold',
+    marginBottom: 24,
     textAlign: 'center',
   },
   inputGroup: {
@@ -122,48 +143,15 @@ const styles = StyleSheet.create({
     color: '#222',
     fontWeight: 'bold',
     marginBottom: 6,
-    fontFamily: 'Poppins-SemiBold',
   },
   input: {
     width: '100%',
     borderWidth: 1,
-    borderColor: '#BFC4CA',
+    borderColor: '#222',
     borderRadius: 6,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 15,
-    fontFamily: 'Poppins-Regular',
-    color: '#222',
-    backgroundColor: '#fff',
-  },
-  codeRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: 18,
-  },
-  codeButton: {
-    backgroundColor: '#BFC4CA',
-    borderRadius: 6,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    marginRight: 8,
-  },
-  codeButtonText: {
-    color: '#222',
-    fontWeight: 'bold',
-    fontSize: 15,
-    fontFamily: 'Poppins-Bold',
-  },
-  codeInput: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: '#BFC4CA',
-    borderRadius: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 15,
-    fontFamily: 'Poppins-Regular',
     color: '#222',
     backgroundColor: '#fff',
   },
@@ -180,13 +168,16 @@ const styles = StyleSheet.create({
     color: '#222',
     fontWeight: 'bold',
     fontSize: 17,
-    fontFamily: 'Poppins-Bold',
   },
-  linkText: {
+  loginText: {
+    color: '#222',
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  loginLink: {
     color: '#174BA7',
     fontWeight: 'bold',
     textDecorationLine: 'underline',
-    fontFamily: 'Poppins-Bold',
   },
 });
 

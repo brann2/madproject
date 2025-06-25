@@ -1,20 +1,21 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-import Svg, { Rect, Polygon } from 'react-native-svg';
+import {View, Text, StyleSheet, Dimensions} from 'react-native';
+import Button from '../../components/atoms/Button';
+import Svg, {Rect, Polygon} from 'react-native-svg';
 import ArrowBack from '../../assets/Vector7.svg';
 import GlobeIcon from '../../assets/globalr.svg';
 import PhoneIcon from '../../assets/Group 97.svg';
 import FacebookIcon from '../../assets/Group 96.svg';
 import InstagramIcon from '../../assets/Group 95.svg';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const contacts = [
-  { icon: GlobeIcon, value: 'smpadvent4paal2manado.com' },
-  { icon: PhoneIcon, value: '(0431) 841700' },
-  { icon: FacebookIcon, value: 'SMP Advent 4 Paal 2 Manado' },
-  { icon: InstagramIcon, value: '@smp advent 4 paal 2 manado' },
+  {icon: GlobeIcon, value: 'smpadvent4paal2manado.com'},
+  {icon: PhoneIcon, value: '(0431) 841700'},
+  {icon: FacebookIcon, value: 'SMP Advent 4 Paal 2 Manado'},
+  {icon: InstagramIcon, value: '@smp advent 4 paal 2 manado'},
 ];
 
 const Help = () => {
@@ -25,12 +26,21 @@ const Help = () => {
       <View style={styles.headerGradient}>
         <Svg height={140} width={width} style={StyleSheet.absoluteFill}>
           <Rect x="0" y="0" width={width} height="140" fill="#0A2A66" />
-          <Polygon points={`0,30 ${width},0 ${width},80 0,120`} fill="#174BA7" />
-          <Polygon points={`0,110 ${width},90 ${width},140 0,140`} fill="#174BA7" />
+          <Polygon
+            points={`0,30 ${width},0 ${width},80 0,120`}
+            fill="#174BA7"
+          />
+          <Polygon
+            points={`0,110 ${width},90 ${width},140 0,140`}
+            fill="#174BA7"
+          />
         </Svg>
-        <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <ArrowBack width={26} height={26} />
-        </TouchableOpacity>
+        <Button
+          title="Back"
+          onPress={() => navigation.goBack()}
+          style={styles.backBtn}
+          textStyle={{color: '#174BA7', fontWeight: 'bold'}}
+        />
         <Text style={styles.headerTitle}>Help Center</Text>
       </View>
       <View style={styles.contentWrapper}>
@@ -121,4 +131,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Help; 
+export default Help;
