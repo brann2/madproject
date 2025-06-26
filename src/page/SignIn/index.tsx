@@ -1,21 +1,51 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Text, Image} from 'react-native';
+import {View, StyleSheet, Text, Image, Alert} from 'react-native';
 import TextInput from '../../components/molecules/TextInput';
 import Button from '../../components/atoms/Button';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import Logo from '../../assets/logo.svg';
+import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
+import '../../config/firebase';
 
 const SignIn: React.FC = () => {
-  const [name, setName] = useState('');
-  const [dob, setDob] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const handleSignIn = () => {
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, email, password)
+      .then(userCredential => {
+        // Login berhasil
+        Alert.alert('Success', 'Berhasil Login!');
+        navigation.navigate('Home');
+      })
+      .catch(error => {
+        const errorCode = error.code;
+        let errorMessage = '';
+        switch (errorCode) {
+          case 'auth/user-not-found':
+            errorMessage = 'Email tidak ditemukan.';
+            break;
+          case 'auth/wrong-password':
+            errorMessage = 'Password salah.';
+            break;
+          case 'auth/invalid-email':
+            errorMessage = 'Format email tidak valid.';
+            break;
+          default:
+            errorMessage = error.message;
+        }
+        Alert.alert('Gagal Login', errorMessage);
+      });
+  };
 
   return (
     <View style={styles.root}>
       {/* Header biru dengan logo dan welcome */}
       <View style={styles.headerBlue}>
-        <Logo width={80} height={80} style={styles.logo} />
+        <Logo width={158} height={150} style={styles.logo} />
         <Text style={styles.welcome}>
           Welcome! to{'\n'}Adventist Paal 2{'\n'}Library
         </Text>
@@ -25,27 +55,30 @@ const SignIn: React.FC = () => {
         <Text style={styles.signInTitle}>Sign In</Text>
         <View style={styles.inputGroup}>
           <TextInput
-            label="Name"
-            placeholder="John Doe"
-            value={name}
-            onChangeText={setName}
+            label="Email"
+            placeholder="your@email.com"
+            value={email}
+            onChangeText={setEmail}
             inputStyle={styles.input}
             labelStyle={styles.label}
+            keyboardType="email-address"
+            autoCapitalize="none"
           />
         </View>
         <View style={styles.inputGroup}>
           <TextInput
-            label="Date Of Birth"
-            placeholder="18/07/2001"
-            value={dob}
-            onChangeText={setDob}
+            label="Password"
+            placeholder="Enter your password"
+            value={password}
+            onChangeText={setPassword}
             inputStyle={styles.input}
             labelStyle={styles.label}
+            secureTextEntry={true}
           />
         </View>
         <Button
           title="Sign In"
-          onPress={() => navigation.navigate('Home')}
+          onPress={handleSignIn}
           style={styles.signInButton}
           textStyle={styles.signInButtonText}
         />
@@ -71,20 +104,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#174BA7',
     alignItems: 'center',
     paddingTop: 40,
-    paddingBottom: 24,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+    paddingBottom: 54,
+    borderTopLeftRadius: 34,
+    borderTopRightRadius: 34,
   },
   logo: {
     marginBottom: 8,
+    width: 250,
+    height: 250,
   },
   welcome: {
     color: '#fff',
-    fontSize: 22,
+    fontSize: 36,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 8,
-    lineHeight: 28,
+    lineHeight: 38,
   },
   card: {
     backgroundColor: '#fff',

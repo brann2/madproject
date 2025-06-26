@@ -1,17 +1,53 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, Alert} from 'react-native';
 import TextInput from '../../components/molecules/TextInput';
 import Button from '../../components/atoms/Button';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import Logo from '../../assets/logo.svg';
+import {getAuth, createUserWithEmailAndPassword} from 'firebase/auth';
+import '../../config/firebase';
 
 const SignUp: React.FC = () => {
   const [name, setName] = useState('');
   const [dob, setDob] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
   const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const handleSignUp = () => {
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(userCredential => {
+        // Signed up
+        const user = userCredential.user;
+        Alert.alert('Success', 'Berhasil Daftar');
+        // Optionally navigate to another screen
+        // navigation.navigate('Login');
+      })
+      .catch(error => {
+        const errorCode = error.code;
+        let errorMessage = '';
+        switch (errorCode) {
+          case 'auth/email-already-in-use':
+            errorMessage = 'Email sudah digunakan. Silakan gunakan email lain.';
+            break;
+          case 'auth/invalid-email':
+            errorMessage = 'Format email tidak valid.';
+            break;
+          case 'auth/weak-password':
+            errorMessage =
+              'Password terlalu lemah. Gunakan minimal 6 karakter.';
+            break;
+          case 'auth/missing-password':
+            errorMessage = 'Password wajib diisi.';
+            break;
+          default:
+            errorMessage = error.message;
+        }
+        Alert.alert('Gagal Daftar', errorMessage);
+      });
+  };
 
   return (
     <View style={styles.root}>
@@ -59,18 +95,18 @@ const SignUp: React.FC = () => {
         </View>
         <View style={styles.inputGroup}>
           <TextInput
-            label="Phone Number"
-            placeholder="08xxxxxxxxxx"
-            value={phone}
-            onChangeText={setPhone}
+            label="Password"
+            placeholder="Enter your password"
+            value={password}
+            onChangeText={setPassword}
             inputStyle={styles.input}
             labelStyle={styles.label}
-            keyboardType="phone-pad"
+            secureTextEntry={true}
           />
         </View>
         <Button
           title="Sign Up"
-          onPress={() => {}}
+          onPress={handleSignUp}
           style={styles.signUpButton}
           textStyle={styles.signUpButtonText}
         />
