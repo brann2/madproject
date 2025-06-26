@@ -55,6 +55,7 @@ const SignIn: React.FC = () => {
         <Text style={styles.signInTitle}>Sign In</Text>
         <View style={styles.inputGroup}>
           <TextInput
+
             label="Email"
             placeholder="your@email.com"
             value={email}
@@ -153,12 +154,15 @@ const styles = StyleSheet.create({
     color: '#222',
     fontWeight: 'bold',
     marginBottom: 6,
+    marginLeft: 50,
+ 
   },
   input: {
-    width: '100%',
+    width: '80%',
+    alignSelf: 'center',
     borderWidth: 1,
     borderColor: '#222',
-    borderRadius: 6,
+    borderRadius: 1,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 15,
@@ -167,22 +171,23 @@ const styles = StyleSheet.create({
   },
   signInButton: {
     backgroundColor: '#BFC4CA',
-    borderRadius: 6,
-    paddingVertical: 12,
+    borderRadius: 50,
+    paddingVertical: 6,
     alignItems: 'center',
-    width: '100%',
+    width: '60%',
     marginTop: 8,
     marginBottom: 18,
   },
   signInButtonText: {
     color: '#222',
     fontWeight: 'bold',
-    fontSize: 17,
+    fontSize: 20,
   },
   signupText: {
     color: '#222',
-    fontSize: 14,
+    fontSize: 16,
     textAlign: 'center',
+    letterSpacing: 0.5,
   },
   signupLink: {
     color: '#174BA7',
