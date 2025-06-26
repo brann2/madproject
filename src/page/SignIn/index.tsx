@@ -142,12 +142,12 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: 'bold',
     color: '#222',
-    marginBottom: 24,
+    marginBottom: 2,
     textAlign: 'center',
   },
   inputGroup: {
     width: '100%',
-    marginBottom: 18,
+    marginBottom: 15,
   },
   label: {
     fontSize: 13,
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 6,
     marginLeft: 50,
- 
+    marginRight: 50,
   },
   input: {
     width: '80%',

@@ -87,13 +87,13 @@ const Home = () => {
       <StatusBar barStyle="light-content" backgroundColor="#174BA7" />
       {/* Header biru dengan logo, teks, dan avatar */}
       <View style={styles.headerBlue}>
-        <Logo width={48} height={48} style={styles.logo} />
+        <Logo width={63} height={64} style={styles.logo} />
         <View style={styles.headerTextWrap}>
           <Text style={styles.headerTitle}>Adventist Paal 2 Library</Text>
           <Text style={styles.headerHi}>Hi, John</Text>
         </View>
         <View style={styles.avatar}>
-          <ProfileIcon width={38} height={38} />
+          <ProfileIcon width={35} height={35} />
         </View>
       </View>
       {/* Card menu overlap, rounded besar, shadow */}
