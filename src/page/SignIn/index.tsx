@@ -1,15 +1,64 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Text, Image} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import TextInput from '../../components/molecules/TextInput';
 import Button from '../../components/atoms/Button';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import Logo from '../../assets/logo.svg';
+import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
+import {getDatabase, ref, set} from 'firebase/database';
+import '../../config/firebase';
 
 const SignIn: React.FC = () => {
-  const [name, setName] = useState('');
-  const [dob, setDob] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const handleSignIn = async () => {
+    setLoading(true);
+    const auth = getAuth();
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      const user = userCredential.user;
+      // Simpan user ke Realtime Database
+      const db = getDatabase();
+      await set(ref(db, 'users/' + user.uid), {
+        email: user.email,
+        uid: user.uid,
+      });
+      setLoading(false);
+      Alert.alert('Success', 'Berhasil Login!');
+      navigation.navigate('Home');
+    } catch (error: any) {
+      setLoading(false);
+      let errorMessage = '';
+      switch (error.code) {
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+        case 'auth/invalid-credential':
+          errorMessage = 'Email atau password salah / tidak terdaftar.';
+          break;
+        case 'auth/invalid-email':
+          errorMessage = 'Format email tidak valid.';
+          break;
+        default:
+          errorMessage = error.message;
+      }
+      Alert.alert('Gagal Login', errorMessage);
+    }
+  };
 
   return (
     <View style={styles.root}>
@@ -25,27 +74,30 @@ const SignIn: React.FC = () => {
         <Text style={styles.signInTitle}>Sign In</Text>
         <View style={styles.inputGroup}>
           <TextInput
-            label="Name"
-            placeholder="John Doe"
-            value={name}
-            onChangeText={setName}
+            label="Email"
+            placeholder="your@email.com"
+            value={email}
+            onChangeText={setEmail}
             inputStyle={styles.input}
             labelStyle={styles.label}
+            keyboardType="email-address"
+            autoCapitalize="none"
           />
         </View>
         <View style={styles.inputGroup}>
           <TextInput
-            label="Date Of Birth"
-            placeholder="18/07/2001"
-            value={dob}
-            onChangeText={setDob}
+            label="Password"
+            placeholder="Enter your password"
+            value={password}
+            onChangeText={setPassword}
             inputStyle={styles.input}
             labelStyle={styles.label}
+            secureTextEntry={true}
           />
         </View>
         <Button
           title="Sign In"
-          onPress={() => navigation.navigate('Home')}
+          onPress={handleSignIn}
           style={styles.signInButton}
           textStyle={styles.signInButtonText}
         />
@@ -57,6 +109,11 @@ const SignIn: React.FC = () => {
             Sign Up
           </Text>
         </Text>
+        {loading && (
+          <View style={styles.loadingOverlay}>
+            <ActivityIndicator size="large" color="#174BA7" />
+          </View>
+        )}
       </View>
     </View>
   );
@@ -153,6 +210,17 @@ const styles = StyleSheet.create({
     color: '#174BA7',
     fontWeight: 'bold',
     textDecorationLine: 'underline',
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
   },
 });
 

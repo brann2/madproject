@@ -30,6 +30,8 @@ import BookCollectionIcon from '../../assets/bookcollection.svg';
 import FAQIcon from '../../assets/FAQ.svg';
 import ProfileIcon from '../../assets/profile.svg';
 import HomeIcon from '../../assets/logo.svg';
+import MyProfile from '../MyProfile';
+import {useUser} from '../../context/UserContext';
 
 const {width} = Dimensions.get('window');
 
@@ -44,6 +46,7 @@ type RootStackParamList = {
   RiwayatPinjam: undefined;
   Pengembalian: undefined;
   Peminjaman: undefined;
+  MyProfile: undefined;
 };
 
 const bookImages = [
@@ -82,6 +85,7 @@ const avatarUrl = 'https://randomuser.me/api/portraits/men/1.jpg';
 
 const Home = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const {avatar, name} = useUser();
   return (
     <View style={styles.root}>
       <StatusBar barStyle="light-content" backgroundColor="#174BA7" />
@@ -90,10 +94,24 @@ const Home = () => {
         <Logo width={48} height={48} style={styles.logo} />
         <View style={styles.headerTextWrap}>
           <Text style={styles.headerTitle}>Adventist Paal 2 Library</Text>
-          <Text style={styles.headerHi}>Hi, John</Text>
+          <Text style={styles.headerHi}>Hi, {name}</Text>
         </View>
         <View style={styles.avatar}>
-          <ProfileIcon width={38} height={38} />
+          {avatar ? (
+            <RNImage
+              source={{uri: avatar}}
+              style={{width: 38, height: 38, borderRadius: 19}}
+            />
+          ) : (
+            <View
+              style={{
+                width: 38,
+                height: 38,
+                borderRadius: 19,
+                backgroundColor: '#eee',
+              }}
+            />
+          )}
         </View>
       </View>
       {/* Card menu overlap, rounded besar, shadow */}
@@ -187,8 +205,22 @@ const Home = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.navItem}
-          onPress={() => navigation.navigate('Profile')}>
-          <ProfileIcon width={24} height={24} />
+          onPress={() => navigation.navigate('MyProfile')}>
+          {avatar ? (
+            <RNImage
+              source={{uri: avatar}}
+              style={{width: 24, height: 24, borderRadius: 12}}
+            />
+          ) : (
+            <View
+              style={{
+                width: 24,
+                height: 24,
+                borderRadius: 12,
+                backgroundColor: '#eee',
+              }}
+            />
+          )}
           <Text style={styles.navText}>Profile</Text>
         </TouchableOpacity>
       </View>

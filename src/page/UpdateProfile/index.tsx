@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import Svg, { Rect, Polygon } from 'react-native-svg';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Dimensions,
+  Image,
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import Svg, {Rect, Polygon} from 'react-native-svg';
 import EditIcon from '../../assets/Vector2.svg';
 import ArrowBack from '../../assets/Vector7.svg';
+import {useUser} from '../../context/UserContext';
 
-const { width } = Dimensions.get('window');
-
-const AVATAR_PLACEHOLDER = 'https://randomuser.me/api/portraits/men/1.jpg'; // Placeholder image
+const {width} = Dimensions.get('window');
 
 type RootStackParamList = {
   UpdateProfile: undefined;
@@ -16,10 +23,21 @@ type RootStackParamList = {
 
 const UpdateProfile = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const [nama, setNama] = useState('John');
+  const {name, setName} = useUser();
+  const [nama, setNama] = useState(name || '');
   const [telp, setTelp] = useState('');
   const [bio, setBio] = useState('');
   const [tglLahir, setTglLahir] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleUpdateProfile = async () => {
+    setLoading(true);
+    // Simulasi update, bisa tambahkan update ke Firebase jika perlu
+    setName(nama);
+    setLoading(false);
+    console.log('Navigating back to MyProfile...');
+    navigation.goBack();
+  };
 
   return (
     <View style={styles.container}>
@@ -27,10 +45,18 @@ const UpdateProfile = () => {
       <View style={styles.headerGradient}>
         <Svg height={140} width={width} style={StyleSheet.absoluteFill}>
           <Rect x="0" y="0" width={width} height="140" fill="#0A2A66" />
-          <Polygon points={`0,30 ${width},0 ${width},80 0,120`} fill="#174BA7" />
-          <Polygon points={`0,110 ${width},90 ${width},140 0,140`} fill="#174BA7" />
+          <Polygon
+            points={`0,30 ${width},0 ${width},80 0,120`}
+            fill="#174BA7"
+          />
+          <Polygon
+            points={`0,110 ${width},90 ${width},140 0,140`}
+            fill="#174BA7"
+          />
         </Svg>
-        <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          style={styles.backBtn}
+          onPress={() => navigation.goBack()}>
           <ArrowBack width={24} height={24} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Profile</Text>
@@ -38,7 +64,6 @@ const UpdateProfile = () => {
       {/* Avatar dengan tombol edit */}
       <View style={styles.avatarWrapper}>
         <View style={styles.avatarCircle}>
-          <Image source={{ uri: AVATAR_PLACEHOLDER }} style={styles.avatarImg} />
           <TouchableOpacity style={styles.editBtn}>
             <EditIcon width={22} height={22} />
           </TouchableOpacity>
@@ -66,7 +91,7 @@ const UpdateProfile = () => {
         />
         <Text style={styles.label}>BIO</Text>
         <TextInput
-          style={[styles.input, { height: 60 }]}
+          style={[styles.input, {height: 60}]}
           value={bio}
           onChangeText={setBio}
           placeholder="BIO"
@@ -81,8 +106,13 @@ const UpdateProfile = () => {
           placeholder="Tanggal Lahir"
           placeholderTextColor="#A0B5D1"
         />
-        <TouchableOpacity style={styles.saveBtn}>
-          <Text style={styles.saveBtnText}>Update Profile</Text>
+        <TouchableOpacity
+          style={styles.saveBtn}
+          onPress={handleUpdateProfile}
+          disabled={loading}>
+          <Text style={styles.saveBtnText}>
+            {loading ? 'Updating...' : 'Update Profile'}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -135,7 +165,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     shadowColor: '#000',
     shadowOpacity: 0.08,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowRadius: 4,
     elevation: 2,
     borderWidth: 2,
@@ -201,4 +231,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UpdateProfile; 
+export default UpdateProfile;

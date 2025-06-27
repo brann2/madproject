@@ -6,6 +6,7 @@ import {
   ScrollView,
   Dimensions,
   Image as RNImage,
+  TouchableOpacity,
 } from 'react-native';
 import TextInput from '../../components/molecules/TextInput';
 import Button from '../../components/atoms/Button';
@@ -19,6 +20,7 @@ import ProfileIcon from '../../assets/Vector.svg';
 import BookCollectionIcon from '../../assets/bookcollection.svg';
 import FAQIcon from '../../assets/FAQ.svg';
 import HomeIcon from '../../assets/logo.svg';
+import {useUser} from '../../context/UserContext';
 
 const {width} = Dimensions.get('window');
 
@@ -30,6 +32,7 @@ type RootStackParamList = {
   Profile: undefined;
   BookCollection: undefined;
   FAQ: undefined;
+  MyProfile: undefined;
 };
 
 const faqData = [
@@ -58,6 +61,7 @@ const FAQ = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [expanded, setExpanded] = useState<number | null>(null);
   const [search, setSearch] = useState('');
+  const {avatar} = useUser();
 
   const filteredFaq = faqData.filter(faq =>
     faq.question.toLowerCase().includes(search.toLowerCase()),
@@ -100,12 +104,15 @@ const FAQ = () => {
         showsVerticalScrollIndicator={false}>
         {filteredFaq.map((item, idx) => (
           <View key={idx} style={styles.accordionItem}>
-            <Button
-              title={item.question}
-              onPress={() => setExpanded(expanded === idx ? null : idx)}
+            <TouchableOpacity
               style={styles.accordionHeader}
-              textStyle={styles.accordionTitle}
-            />
+              onPress={() => setExpanded(expanded === idx ? null : idx)}
+              activeOpacity={0.7}>
+              <Text style={styles.accordionTitle}>{item.question}</Text>
+              <Text style={styles.accordionIcon}>
+                {expanded === idx ? '▲' : '▼'}
+              </Text>
+            </TouchableOpacity>
             {expanded === idx && (
               <View style={styles.accordionContent}>
                 <Text style={styles.accordionAnswer}>{item.answer}</Text>
@@ -118,30 +125,42 @@ const FAQ = () => {
       <LinearGradient
         colors={['rgba(255,255,255,0.9)', 'rgba(255,255,255,1)']}
         style={styles.bottomNav}>
-        <Button
-          title="Home"
-          onPress={() => navigation.navigate('Home')}
+        <TouchableOpacity
           style={styles.navItem}
-          textStyle={styles.navText}
-        />
-        <Button
-          title="Book Collection"
-          onPress={() => navigation.navigate('BookCollection')}
+          onPress={() => navigation.navigate('Home')}>
+          <HomeIcon width={24} height={24} />
+          <Text style={styles.navText}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
           style={styles.navItem}
-          textStyle={styles.navText}
-        />
-        <Button
-          title="FAQ"
-          onPress={() => {}}
-          style={[styles.navItem, styles.activeNavItem]}
-          textStyle={[styles.navText, styles.activeNavText]}
-        />
-        <Button
-          title="Profile"
-          onPress={() => navigation.navigate('Profile')}
+          onPress={() => navigation.navigate('BookCollection')}>
+          <BookCollectionIcon width={24} height={24} />
+          <Text style={styles.navText}>Book Collection</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.navItem, styles.activeNavItem]}>
+          <FAQIcon width={24} height={24} />
+          <Text style={[styles.navText, styles.activeNavText]}>FAQ</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
           style={styles.navItem}
-          textStyle={styles.navText}
-        />
+          onPress={() => navigation.navigate('MyProfile')}>
+          {avatar ? (
+            <RNImage
+              source={{uri: avatar}}
+              style={{width: 24, height: 24, borderRadius: 12}}
+            />
+          ) : (
+            <View
+              style={{
+                width: 24,
+                height: 24,
+                borderRadius: 12,
+                backgroundColor: '#eee',
+              }}
+            />
+          )}
+          <Text style={styles.navText}>Profile</Text>
+        </TouchableOpacity>
       </LinearGradient>
     </View>
   );
@@ -223,6 +242,10 @@ const styles = StyleSheet.create({
   accordionAnswer: {
     fontSize: 14,
     color: '#444',
+  },
+  accordionIcon: {
+    fontSize: 12,
+    color: '#666',
   },
   bottomNav: {
     flexDirection: 'row',
