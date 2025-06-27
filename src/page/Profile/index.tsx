@@ -1,135 +1,114 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
+  Image,
+  TouchableOpacity,
+  TextInput,
   StyleSheet,
-  Dimensions,
-  Image as RNImage,
 } from 'react-native';
-import Button from '../../components/atoms/Button';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import Svg, {Rect, Polygon} from 'react-native-svg';
-import LinearGradient from 'react-native-linear-gradient';
-import ProfileIcon from '../../assets/Vector.svg';
-import VectorProfile from '../../assets/Vector.svg';
-import SettingsIcon from '../../assets/Vector2.svg';
-import HelpIcon from '../../assets/Vector7.svg';
-import LogoutIcon from '../../assets/Group 2.svg';
-import DaftarBukuIcon from '../../assets/daftarbuku.svg';
-import HomeIcon from '../../assets/logo.svg';
-import FAQIcon from '../../assets/FAQ.svg';
-import BookCollectionIcon from '../../assets/bookcollection.svg';
-
-const {width} = Dimensions.get('window');
-
-type RootStackParamList = {
-  Main: undefined;
-  Login: undefined;
-  SignUp: undefined;
-  Home: undefined;
-  Profile: undefined;
-  BookCollection: undefined;
-  FAQ: undefined;
-  Settings: undefined;
-};
-
-const user = {
-  name: 'John',
-  avatar: null,
-};
-
-const menu = [
-  {
-    label: 'Profile',
-    icon: VectorProfile,
-    onPress: (navigation: any) => navigation.navigate('UpdateProfile'),
-  },
-  {
-    label: 'Settings',
-    icon: SettingsIcon,
-    onPress: (navigation: any) => navigation.navigate('Settings'),
-  },
-  {
-    label: 'Help',
-    icon: LogoutIcon,
-    onPress: (navigation: any) => navigation.navigate('Help'),
-  },
-  {
-    label: 'Logout',
-    icon: HelpIcon,
-    onPress: (navigation: any) => navigation.navigate('Login'),
-  },
-];
+import {launchCamera} from 'react-native-image-picker';
+import {useUser} from '../../context/UserContext';
 
 const Profile = () => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const {avatar, setAvatar, name, setName} = useUser();
+  const [localAvatar, setLocalAvatar] = useState<string | null>(avatar);
+  const [localName, setLocalName] = useState(name);
+  const [phone, setPhone] = useState('');
+  const [bio, setBio] = useState('');
+  const [dob, setDob] = useState('');
+
+  const handleEditAvatar = () => {
+    launchCamera(
+      {
+        mediaType: 'photo',
+        includeBase64: true,
+        saveToPhotos: false,
+      },
+      response => {
+        if (response.didCancel) return;
+        if (response.assets && response.assets.length > 0) {
+          setLocalAvatar(
+            `data:${response.assets[0].type};base64,${response.assets[0].base64}`,
+          );
+        }
+      },
+    );
+  };
+
+  const handleUpdateProfile = () => {
+    setAvatar(localAvatar);
+    setName(localName);
+    // Simpan phone, bio, dob ke backend jika perlu
+    // Tampilkan notifikasi sukses jika perlu
+  };
+
   return (
     <View style={styles.container}>
-      {/* Header biru diagonal dan judul di atas avatar */}
-      <View style={styles.headerGradient}>
-        <Svg height={140} width={width} style={StyleSheet.absoluteFill}>
-          <Rect x="0" y="0" width={width} height="140" fill="#0A2A66" />
-          <Polygon
-            points={`0,30 ${width},0 ${width},80 0,120`}
-            fill="#174BA7"
-          />
-          <Polygon
-            points={`0,110 ${width},90 ${width},140 0,140`}
-            fill="#174BA7"
-          />
-        </Svg>
-        <Text style={styles.headerTitle}>My Profile</Text>
+      <View style={styles.header} />
+      <View style={styles.avatarContainer}>
+        <TouchableOpacity
+          onPress={handleEditAvatar}
+          style={styles.avatarButton}>
+          {localAvatar ? (
+            <Image source={{uri: localAvatar}} style={styles.avatar} />
+          ) : (
+            <View
+              style={[
+                styles.avatar,
+                {
+                  backgroundColor: '#eee',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                },
+              ]}
+            />
+          )}
+          <View style={styles.settingIcon}>
+            <Text style={{fontSize: 18}}>⚙️</Text>
+          </View>
+        </TouchableOpacity>
+        <Text style={styles.name}>{localName}</Text>
       </View>
-      {/* Avatar */}
-      <View style={styles.avatarWrapper}>
-        <View style={styles.avatarCircle}>
-          <ProfileIcon width={60} height={60} />
-        </View>
+      <View style={styles.form}>
+        <Text style={styles.label}>Nama Lengkap</Text>
+        <TextInput
+          style={styles.input}
+          value={localName}
+          onChangeText={setLocalName}
+          placeholder="John"
+          placeholderTextColor="#BFC4CA"
+        />
+        <Text style={styles.label}>No. Telp</Text>
+        <TextInput
+          style={styles.input}
+          value={phone}
+          onChangeText={setPhone}
+          placeholder="No. Telp"
+          placeholderTextColor="#BFC4CA"
+        />
+        <Text style={styles.label}>BIO</Text>
+        <TextInput
+          style={styles.input}
+          value={bio}
+          onChangeText={setBio}
+          placeholder="BIO"
+          placeholderTextColor="#BFC4CA"
+        />
+        <Text style={styles.label}>Tanggal Lahir</Text>
+        <TextInput
+          style={styles.input}
+          value={dob}
+          onChangeText={setDob}
+          placeholder="Tanggal Lahir"
+          placeholderTextColor="#BFC4CA"
+        />
+        <TouchableOpacity
+          style={styles.updateButton}
+          onPress={handleUpdateProfile}>
+          <Text style={styles.updateButtonText}>Update Profile</Text>
+        </TouchableOpacity>
       </View>
-      {/* Nama User */}
-      <Text style={styles.name}>{user.name}</Text>
-      {/* Menu List */}
-      <View style={styles.menuWrapper}>
-        {menu.map((item, idx) => (
-          <Button
-            key={item.label}
-            title={item.label}
-            onPress={() => item.onPress(navigation)}
-            style={styles.menuItem}
-            textStyle={styles.menuLabel}
-          />
-        ))}
-      </View>
-      {/* Bottom Navigation */}
-      <LinearGradient
-        colors={['rgba(255,255,255,0.9)', 'rgba(255,255,255,1)']}
-        style={styles.bottomNav}>
-        <Button
-          title="Home"
-          onPress={() => navigation.navigate('Home')}
-          style={styles.navItem}
-          textStyle={styles.navText}
-        />
-        <Button
-          title="Book Collection"
-          onPress={() => navigation.navigate('BookCollection')}
-          style={styles.navItem}
-          textStyle={[styles.navText, styles.activeNavText]}
-        />
-        <Button
-          title="FAQ"
-          onPress={() => navigation.navigate('FAQ')}
-          style={styles.navItem}
-          textStyle={styles.navText}
-        />
-        <Button
-          title="Profile"
-          onPress={() => {}}
-          style={styles.navItem}
-          textStyle={[styles.navText, styles.activeNavText]}
-        />
-      </LinearGradient>
     </View>
   );
 };
@@ -137,113 +116,83 @@ const Profile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7F9FB',
+    backgroundColor: '#F7F8FA',
   },
-  headerGradient: {
-    height: 140,
-    justifyContent: 'flex-end',
-    paddingBottom: 16,
-    paddingHorizontal: 20,
-    position: 'relative',
-    marginBottom: 8,
-    overflow: 'hidden',
-  },
-  headerTitle: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: 'bold',
+  header: {
+    backgroundColor: '#174BA7',
+    height: 120,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
     position: 'absolute',
-    top: 38,
+    top: 0,
     left: 0,
     right: 0,
-    textAlign: 'center',
-    zIndex: 2,
+    zIndex: 0,
   },
-  avatarWrapper: {
+  avatarContainer: {
     alignItems: 'center',
-    marginTop: -40,
-    marginBottom: 6,
+    marginTop: 60,
+    marginBottom: 16,
+    zIndex: 1,
   },
-  avatarCircle: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#fff',
+  avatarButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowOffset: {width: 0, height: 2},
-    shadowRadius: 4,
-    elevation: 2,
-    borderWidth: 2,
-    borderColor: '#E0E0E0',
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 4,
+    borderColor: '#fff',
+    backgroundColor: '#eee',
+  },
+  settingIcon: {
+    position: 'absolute',
+    bottom: 4,
+    right: 4,
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 2,
+    borderWidth: 1,
+    borderColor: '#174BA7',
   },
   name: {
+    fontWeight: 'bold',
     fontSize: 18,
+    marginTop: 8,
+    color: '#222',
+  },
+  form: {
+    marginHorizontal: 24,
+    marginTop: 16,
+  },
+  label: {
     fontWeight: 'bold',
     color: '#222',
-    textAlign: 'center',
-    marginBottom: 18,
+    marginBottom: 4,
+    marginTop: 12,
   },
-  menuWrapper: {
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    paddingTop: 18,
-    marginTop: 8,
-    flex: 1,
-  },
-  menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
-  },
-  menuLabel: {
-    flex: 1,
-    fontSize: 16,
+  input: {
+    backgroundColor: '#F3F6FB',
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    fontSize: 15,
     color: '#222',
-    fontWeight: '500',
+    marginBottom: 4,
   },
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+  updateButton: {
+    backgroundColor: '#174BA7',
+    borderRadius: 10,
+    paddingVertical: 14,
     alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    backgroundColor: 'white',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: -4,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 10,
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
+    marginTop: 24,
   },
-  navItem: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 8,
-    flex: 1,
-  },
-  activeNavText: {
-    color: '#174BA7',
-    fontWeight: '600',
-  },
-  navText: {
-    fontSize: 12,
-    color: '#666',
-    marginTop: 4,
+  updateButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 
