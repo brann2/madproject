@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet, Dimensions, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import Button from '../../components/atoms/Button';
 import Svg, {Rect, Polygon} from 'react-native-svg';
 import ArrowBack from '../../assets/Vector7.svg';
@@ -21,7 +28,7 @@ const Settings = () => {
   ];
   return (
     <View style={styles.container}>
-      {/* Header biru diagonal dengan back arrow */}
+      {/* Header biru diagonal tanpa back arrow */}
       <View style={styles.headerGradient}>
         <Svg height={140} width={width} style={StyleSheet.absoluteFill}>
           <Rect x="0" y="0" width={width} height="140" fill="#0A2A66" />
@@ -34,23 +41,17 @@ const Settings = () => {
             fill="#174BA7"
           />
         </Svg>
-        <Button
-          title="Back"
-          onPress={() => navigation.goBack()}
-          style={styles.backBtn}
-          textStyle={{color: '#174BA7', fontWeight: 'bold'}}
-        />
         <Text style={styles.headerTitle}>Settings</Text>
       </View>
       <ScrollView contentContainerStyle={styles.optionsWrapper}>
         {settingsOptions.map((item, idx) => (
-          <Button
+          <TouchableOpacity
             key={item.label}
-            title={item.label}
             onPress={item.onPress}
             style={styles.optionItem}
-            textStyle={styles.optionLabel}
-          />
+            activeOpacity={0.7}>
+            <Text style={styles.optionLabel}>{item.label}</Text>
+          </TouchableOpacity>
         ))}
       </ScrollView>
     </View>
@@ -70,13 +71,6 @@ const styles = StyleSheet.create({
     position: 'relative',
     marginBottom: 0,
     overflow: 'hidden',
-  },
-  backBtn: {
-    position: 'absolute',
-    top: 44,
-    left: 18,
-    zIndex: 3,
-    padding: 4,
   },
   headerTitle: {
     color: '#fff',
@@ -99,12 +93,18 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   optionItem: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    marginBottom: 14,
+    shadowColor: '#000',
+    shadowOpacity: 0.04,
+    shadowOffset: {width: 0, height: 2},
+    shadowRadius: 4,
+    elevation: 1,
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 18,
     paddingHorizontal: 28,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
   },
   optionLabel: {
     flex: 1,

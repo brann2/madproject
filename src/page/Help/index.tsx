@@ -35,12 +35,6 @@ const Help = () => {
             fill="#174BA7"
           />
         </Svg>
-        <Button
-          title="Back"
-          onPress={() => navigation.goBack()}
-          style={styles.backBtn}
-          textStyle={{color: '#174BA7', fontWeight: 'bold'}}
-        />
         <Text style={styles.headerTitle}>Help Center</Text>
       </View>
       <View style={styles.contentWrapper}>

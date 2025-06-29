@@ -1,8 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import Svg, { Rect, Polygon } from 'react-native-svg';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Dimensions,
+  ScrollView,
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import Svg, {Rect, Polygon} from 'react-native-svg';
 import Image22 from '../../assets/image 22.svg';
 import Image23 from '../../assets/image 23.svg';
 import Image25 from '../../assets/image25.svg';
@@ -14,9 +22,10 @@ import ProfileIcon from '../../assets/Vector.svg';
 import BookCollectionIcon from '../../assets/bookcollection.svg';
 import FAQIcon from '../../assets/FAQ.svg';
 import HomeIcon from '../../assets/logo.svg';
-import { Image as RNImage } from 'react-native';
+import {Image as RNImage} from 'react-native';
+import {useUser} from '../../context/UserContext';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 type RootStackParamList = {
   Main: undefined;
@@ -26,6 +35,7 @@ type RootStackParamList = {
   Profile: undefined;
   BookCollection: undefined;
   FAQ: undefined;
+  MyProfile: undefined;
 };
 
 const books = [
@@ -67,6 +77,7 @@ const user = {
 
 const BookCollection = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const {avatar} = useUser();
   return (
     <View style={styles.container}>
       {/* Header biru dengan garis diagonal seperti Home */}
@@ -74,25 +85,44 @@ const BookCollection = () => {
         <Svg height={110} width={width} style={StyleSheet.absoluteFill}>
           <Rect x="0" y="0" width={width} height="110" fill="#0A2A66" />
           <Polygon points={`0,20 ${width},0 ${width},50 0,70`} fill="#174BA7" />
-          <Polygon points={`0,80 ${width},60 ${width},110 0,110`} fill="#174BA7" />
+          <Polygon
+            points={`0,80 ${width},60 ${width},110 0,110`}
+            fill="#174BA7"
+          />
         </Svg>
         <Text style={styles.headerTitle}>Book Collection</Text>
       </View>
       {/* List buku */}
-      <ScrollView contentContainerStyle={styles.listWrapper} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.listWrapper}
+        showsVerticalScrollIndicator={false}>
         {books.map((item, idx) => (
           <View style={styles.card} key={item.id}>
             <View style={styles.coverWrapper}>
               <item.Svg width={70} height={100} />
             </View>
             <View style={styles.detailWrapper}>
-              <Text style={styles.detailRow}><Text style={styles.label}>ID</Text> : {item.id}</Text>
-              <Text style={styles.detailRow}><Text style={styles.label}>Judul Buku</Text> : {item.title}</Text>
-              <Text style={styles.detailRow}><Text style={styles.label}>Pengarang</Text> : {item.author}</Text>
-              <Text style={styles.detailRow}><Text style={styles.label}>Penerbit</Text> : {item.publisher}</Text>
-              <Text style={styles.detailRow}><Text style={styles.label}>Tahun Terbit</Text> : {item.year}</Text>
-              <Text style={styles.detailRow}><Text style={styles.label}>Jumlah Halaman</Text> : {item.pages}</Text>
-              <Text style={styles.detailRow}><Text style={styles.label}>Jumlah Buku</Text> : {item.stock}</Text>
+              <Text style={styles.detailRow}>
+                <Text style={styles.label}>ID</Text> : {item.id}
+              </Text>
+              <Text style={styles.detailRow}>
+                <Text style={styles.label}>Judul Buku</Text> : {item.title}
+              </Text>
+              <Text style={styles.detailRow}>
+                <Text style={styles.label}>Pengarang</Text> : {item.author}
+              </Text>
+              <Text style={styles.detailRow}>
+                <Text style={styles.label}>Penerbit</Text> : {item.publisher}
+              </Text>
+              <Text style={styles.detailRow}>
+                <Text style={styles.label}>Tahun Terbit</Text> : {item.year}
+              </Text>
+              <Text style={styles.detailRow}>
+                <Text style={styles.label}>Jumlah Halaman</Text> : {item.pages}
+              </Text>
+              <Text style={styles.detailRow}>
+                <Text style={styles.label}>Jumlah Buku</Text> : {item.stock}
+              </Text>
             </View>
           </View>
         ))}
@@ -100,34 +130,45 @@ const BookCollection = () => {
       {/* Bottom Navigation */}
       <LinearGradient
         colors={['rgba(255,255,255,0.9)', 'rgba(255,255,255,1)']}
-        style={styles.bottomNav}
-      >
-        <TouchableOpacity 
+        style={styles.bottomNav}>
+        <TouchableOpacity
           style={styles.navItem}
-          onPress={() => navigation.navigate('Home')}
-        >
+          onPress={() => navigation.navigate('Home')}>
           <HomeIcon width={24} height={24} />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.navItem, styles.activeNavItem]}
-          onPress={() => {}}
-        >
+          onPress={() => {}}>
           <BookCollectionIcon width={24} height={24} />
-          <Text style={[styles.navText, styles.activeNavText]}>Book Collection</Text>
+          <Text style={[styles.navText, styles.activeNavText]}>
+            Book Collection
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.navItem}
-          onPress={() => navigation.navigate('FAQ')}
-        >
+          onPress={() => navigation.navigate('FAQ')}>
           <FAQIcon width={24} height={24} />
           <Text style={styles.navText}>FAQ</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.navItem}
-          onPress={() => navigation.navigate('Profile')}
-        >
-          <ProfileIcon width={24} height={24} />
+          onPress={() => navigation.navigate('MyProfile')}>
+          {avatar ? (
+            <RNImage
+              source={{uri: avatar}}
+              style={{width: 24, height: 24, borderRadius: 12}}
+            />
+          ) : (
+            <View
+              style={{
+                width: 24,
+                height: 24,
+                borderRadius: 12,
+                backgroundColor: '#eee',
+              }}
+            />
+          )}
           <Text style={styles.navText}>Profile</Text>
         </TouchableOpacity>
       </LinearGradient>
@@ -169,7 +210,7 @@ const styles = StyleSheet.create({
     marginBottom: 18,
     shadowColor: '#000',
     shadowOpacity: 0.08,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowRadius: 8,
     elevation: 2,
   },
@@ -241,4 +282,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BookCollection; 
+export default BookCollection;
