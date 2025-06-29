@@ -107,7 +107,7 @@ const Home = () => {
           renderItem={({item}) => (
             <TouchableOpacity style={styles.menuItemWrapper}>
               <View style={styles.menuIconCircle}>
-                <item.icon width={28} height={28} />
+                <item.icon width={38} height={38} />
               </View>
               <Text style={styles.menuLabel}>{item.label}</Text>
             </TouchableOpacity>
@@ -199,17 +199,17 @@ const Home = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: '#FFFFFF',
   },
   headerBlue: {
     backgroundColor: '#174BA7',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 40,
-    paddingBottom: 18,
+    paddingTop: 15,
+    paddingBottom: 25,
     paddingHorizontal: 20,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
     zIndex: 10,
   },
   logo: {
@@ -239,17 +239,16 @@ const styles = StyleSheet.create({
   },
   menuCard: {
     backgroundColor: '#fff',
-    borderRadius: 28,
-    marginHorizontal: 16,
-    marginTop: -28,
+    borderRadius: 1,
+    marginTop: 20,
     paddingVertical: 18,
     paddingHorizontal: 8,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 2,
-    zIndex: 2,
+    shadowRadius: 2,
+    elevation: 1,
+    zIndex: 1,
   },
   menuList: {
     flexDirection: 'row',
@@ -262,21 +261,21 @@ const styles = StyleSheet.create({
   menuIconCircle: {
     width: 54,
     height: 54,
-    borderRadius: 27,
-    backgroundColor: '#fff',
+    borderRadius: 12,
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 6,
     borderWidth: 1,
     borderColor: '#E5E5E5',
     shadowColor: '#000',
-    shadowOpacity: 0.04,
-    shadowOffset: {width: 0, height: 1},
-    shadowRadius: 2,
-    elevation: 1,
+    shadowOpacity: 1,
+    shadowOffset: {width: 1, height: 1},
+    shadowRadius: 4,
+    elevation: 2,
   },
   menuLabel: {
-    fontSize: 12,
+    fontSize: 10,
     color: '#222',
     fontWeight: 'bold',
     textAlign: 'center',
