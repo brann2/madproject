@@ -55,7 +55,6 @@ const SignIn: React.FC = () => {
         <Text style={styles.signInTitle}>Sign In</Text>
         <View style={styles.inputGroup}>
           <TextInput
-
             label="Email"
             placeholder="your@email.com"
             value={email}
