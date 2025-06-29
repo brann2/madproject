@@ -30,8 +30,6 @@ import BookCollectionIcon from '../../assets/bookcollection.svg';
 import FAQIcon from '../../assets/FAQ.svg';
 import ProfileIcon from '../../assets/profile.svg';
 import HomeIcon from '../../assets/logo.svg';
-import MyProfile from '../MyProfile';
-import {useUser} from '../../context/UserContext';
 
 const {width} = Dimensions.get('window');
 
@@ -46,7 +44,6 @@ type RootStackParamList = {
   RiwayatPinjam: undefined;
   Pengembalian: undefined;
   Peminjaman: undefined;
-  MyProfile: undefined;
 };
 
 const bookImages = [
@@ -85,33 +82,18 @@ const avatarUrl = 'https://randomuser.me/api/portraits/men/1.jpg';
 
 const Home = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const {avatar, name} = useUser();
   return (
     <View style={styles.root}>
       <StatusBar barStyle="light-content" backgroundColor="#174BA7" />
       {/* Header biru dengan logo, teks, dan avatar */}
       <View style={styles.headerBlue}>
-        <Logo width={48} height={48} style={styles.logo} />
+        <Logo width={63} height={64} style={styles.logo} />
         <View style={styles.headerTextWrap}>
           <Text style={styles.headerTitle}>Adventist Paal 2 Library</Text>
-          <Text style={styles.headerHi}>Hi, {name}</Text>
+          <Text style={styles.headerHi}>Hi, John</Text>
         </View>
         <View style={styles.avatar}>
-          {avatar ? (
-            <RNImage
-              source={{uri: avatar}}
-              style={{width: 38, height: 38, borderRadius: 19}}
-            />
-          ) : (
-            <View
-              style={{
-                width: 38,
-                height: 38,
-                borderRadius: 19,
-                backgroundColor: '#eee',
-              }}
-            />
-          )}
+          <ProfileIcon width={35} height={35} />
         </View>
       </View>
       {/* Card menu overlap, rounded besar, shadow */}
@@ -125,7 +107,7 @@ const Home = () => {
           renderItem={({item}) => (
             <TouchableOpacity style={styles.menuItemWrapper}>
               <View style={styles.menuIconCircle}>
-                <item.icon width={28} height={28} />
+                <item.icon width={38} height={38} />
               </View>
               <Text style={styles.menuLabel}>{item.label}</Text>
             </TouchableOpacity>
@@ -205,22 +187,8 @@ const Home = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.navItem}
-          onPress={() => navigation.navigate('MyProfile')}>
-          {avatar ? (
-            <RNImage
-              source={{uri: avatar}}
-              style={{width: 24, height: 24, borderRadius: 12}}
-            />
-          ) : (
-            <View
-              style={{
-                width: 24,
-                height: 24,
-                borderRadius: 12,
-                backgroundColor: '#eee',
-              }}
-            />
-          )}
+          onPress={() => navigation.navigate('Profile')}>
+          <ProfileIcon width={24} height={24} />
           <Text style={styles.navText}>Profile</Text>
         </TouchableOpacity>
       </View>
@@ -231,17 +199,17 @@ const Home = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: '#FFFFFF',
   },
   headerBlue: {
     backgroundColor: '#174BA7',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 40,
-    paddingBottom: 18,
+    paddingTop: 15,
+    paddingBottom: 25,
     paddingHorizontal: 20,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
     zIndex: 10,
   },
   logo: {
@@ -271,17 +239,16 @@ const styles = StyleSheet.create({
   },
   menuCard: {
     backgroundColor: '#fff',
-    borderRadius: 28,
-    marginHorizontal: 16,
-    marginTop: -28,
+    borderRadius: 1,
+    marginTop: 20,
     paddingVertical: 18,
     paddingHorizontal: 8,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 2,
-    zIndex: 2,
+    shadowRadius: 2,
+    elevation: 1,
+    zIndex: 1,
   },
   menuList: {
     flexDirection: 'row',
@@ -294,21 +261,21 @@ const styles = StyleSheet.create({
   menuIconCircle: {
     width: 54,
     height: 54,
-    borderRadius: 27,
-    backgroundColor: '#fff',
+    borderRadius: 12,
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 6,
     borderWidth: 1,
     borderColor: '#E5E5E5',
     shadowColor: '#000',
-    shadowOpacity: 0.04,
-    shadowOffset: {width: 0, height: 1},
-    shadowRadius: 2,
-    elevation: 1,
+    shadowOpacity: 1,
+    shadowOffset: {width: 1, height: 1},
+    shadowRadius: 4,
+    elevation: 2,
   },
   menuLabel: {
-    fontSize: 12,
+    fontSize: 10,
     color: '#222',
     fontWeight: 'bold',
     textAlign: 'center',
