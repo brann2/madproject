@@ -33,6 +33,7 @@ type RootStackParamList = {
   BookCollection: undefined;
   FAQ: undefined;
   MyProfile: undefined;
+  UpdateProfile: undefined;
 };
 
 const faqData = [

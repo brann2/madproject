@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Text, Image, Alert} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import TextInput from '../../components/molecules/TextInput';
 import Button from '../../components/atoms/Button';
 import {useNavigation} from '@react-navigation/native';
@@ -12,16 +19,20 @@ const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation<StackNavigationProp<any>>();
+  const [loading, setLoading] = useState(false);
 
   const handleSignIn = () => {
+    setLoading(true);
     const auth = getAuth();
     signInWithEmailAndPassword(auth, email, password)
       .then(userCredential => {
+        setLoading(false);
         // Login berhasil
         Alert.alert('Success', 'Berhasil Login!');
         navigation.navigate('Home');
       })
       .catch(error => {
+        setLoading(false);
         const errorCode = error.code;
         let errorMessage = '';
         switch (errorCode) {
@@ -30,6 +41,9 @@ const SignIn: React.FC = () => {
             break;
           case 'auth/wrong-password':
             errorMessage = 'Password salah.';
+            break;
+          case 'auth/invalid-credential':
+            errorMessage = 'Email atau password salah.';
             break;
           case 'auth/invalid-email':
             errorMessage = 'Format email tidak valid.';
@@ -77,11 +91,19 @@ const SignIn: React.FC = () => {
           />
         </View>
         <Button
-          title="Sign In"
+          title={loading ? 'Signing In...' : 'Sign In'}
           onPress={handleSignIn}
           style={styles.signInButton}
           textStyle={styles.signInButtonText}
+          disabled={loading}
         />
+        {loading && (
+          <ActivityIndicator
+            size="large"
+            color="#174BA7"
+            style={{marginTop: 12}}
+          />
+        )}
         <Text style={styles.signupText}>
           Don't have an account?{' '}
           <Text

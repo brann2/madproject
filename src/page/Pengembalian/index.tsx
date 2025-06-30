@@ -59,12 +59,6 @@ const Pengembalian = () => {
             fill="#174BA7"
           />
         </Svg>
-        <Button
-          title="Back"
-          onPress={() => navigation.goBack()}
-          style={styles.backBtn}
-          textStyle={{color: '#174BA7', fontWeight: 'bold'}}
-        />
         <Text style={styles.headerTitle}>Formulir Pengembalian</Text>
       </View>
       <View style={styles.contentWrapper}>
@@ -140,13 +134,6 @@ const styles = StyleSheet.create({
     position: 'relative',
     marginBottom: 0,
     overflow: 'hidden',
-  },
-  backBtn: {
-    position: 'absolute',
-    top: 44,
-    left: 18,
-    zIndex: 3,
-    padding: 4,
   },
   headerTitle: {
     color: '#fff',

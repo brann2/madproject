@@ -36,6 +36,7 @@ type RootStackParamList = {
   BookCollection: undefined;
   FAQ: undefined;
   MyProfile: undefined;
+  UpdateProfile: undefined;
 };
 
 const books = [
@@ -157,7 +158,12 @@ const BookCollection = () => {
           {avatar ? (
             <RNImage
               source={{uri: avatar}}
-              style={{width: 24, height: 24, borderRadius: 12}}
+              style={{
+                width: 24,
+                height: 24,
+                borderRadius: 12,
+                resizeMode: 'cover',
+              }}
             />
           ) : (
             <View
