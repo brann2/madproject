@@ -7,6 +7,7 @@ import {
   ScrollView,
   StatusBar,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -23,6 +24,7 @@ import RiwayatPeminjamanIcon from '../../assets/riwayatpeminjaman.svg';
 import BookCollectionIcon from '../../assets/bookcollection.svg';
 import FAQIcon from '../../assets/FAQ.svg';
 import HomeIcon from '../../assets/logo.svg';
+import {useUser} from '../../context/UserContext';
 
 type RootStackParamList = {
   Main: undefined;
@@ -41,7 +43,11 @@ const menuItems = [
   {icon: PeminjamanIcon, label: 'Peminjaman', nav: 'Peminjaman'},
   {icon: PengembalianIcon, label: 'Pengembalian', nav: 'Pengembalian'},
   {icon: DaftarBukuIcon, label: 'Daftar Buku', nav: 'BookCollection'},
-  {icon: RiwayatPeminjamanIcon, label: 'Riwayat Peminjaman', nav: 'RiwayatPinjam'},
+  {
+    icon: RiwayatPeminjamanIcon,
+    label: 'Riwayat Peminjaman',
+    nav: 'RiwayatPinjam',
+  },
 ];
 
 const newArrivals = [
@@ -60,6 +66,7 @@ const borrowedBook = {
 
 const Home = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const {name, avatar} = useUser();
 
   return (
     <View style={styles.root}>
@@ -72,10 +79,17 @@ const Home = () => {
         <Logo width={63} height={64} style={styles.logo} />
         <View style={styles.headerTextWrap}>
           <Text style={styles.headerTitle}>Adventist Paal 2 Library</Text>
-          <Text style={styles.headerHi}>Hi, John</Text>
+          <Text style={styles.headerHi}>Hi, {name}</Text>
         </View>
         <View style={styles.avatar}>
-          <ProfileIcon width={35} height={35} />
+          {avatar ? (
+            <Image
+              source={{uri: avatar}}
+              style={{width: 35, height: 35, borderRadius: 17.5}}
+            />
+          ) : (
+            <ProfileIcon width={35} height={35} />
+          )}
         </View>
       </LinearGradient>
 
@@ -87,7 +101,11 @@ const Home = () => {
           keyExtractor={item => item.label}
           contentContainerStyle={styles.menuList}
           renderItem={({item}) => (
-            <TouchableOpacity style={styles.menuItemWrapper}>
+            <TouchableOpacity
+              style={styles.menuItemWrapper}
+              onPress={() =>
+                navigation.navigate(item.nav as keyof RootStackParamList)
+              }>
               <View style={styles.menuIconCircle}>
                 <item.icon width={38} height={38} />
               </View>
@@ -109,7 +127,11 @@ const Home = () => {
             contentContainerStyle={styles.arrivalsList}
             renderItem={({item}) => (
               <View style={styles.arrivalCard}>
-                <item.Svg width={110} height={150} style={styles.arrivalImage} />
+                <item.Svg
+                  width={110}
+                  height={150}
+                  style={styles.arrivalImage}
+                />
                 <Text style={styles.arrivalTitle}>{item.title}</Text>
               </View>
             )}
@@ -120,16 +142,24 @@ const Home = () => {
         <View style={styles.sectionCardWhite}>
           <Text style={styles.sectionTitleBlack}>Previously Borrowed</Text>
           <View style={styles.borrowedCardInner}>
-            <borrowedBook.Svg width={80} height={120} style={styles.borrowedImage} />
+            <borrowedBook.Svg
+              width={80}
+              height={120}
+              style={styles.borrowedImage}
+            />
             <View style={styles.borrowedInfo}>
               <Text style={styles.borrowedLabel}>Judul Buku</Text>
               <Text style={styles.borrowedValue}>{borrowedBook.title}</Text>
               <Text style={styles.borrowedLabel}>Penulis</Text>
               <Text style={styles.borrowedValue}>{borrowedBook.author}</Text>
               <Text style={styles.borrowedLabel}>Tanggal Dipinjam</Text>
-              <Text style={styles.borrowedValue}>{borrowedBook.borrowDate}</Text>
+              <Text style={styles.borrowedValue}>
+                {borrowedBook.borrowDate}
+              </Text>
               <Text style={styles.borrowedLabel}>Tanggal Dikembalikan</Text>
-              <Text style={styles.borrowedValue}>{borrowedBook.returnDate}</Text>
+              <Text style={styles.borrowedValue}>
+                {borrowedBook.returnDate}
+              </Text>
             </View>
           </View>
         </View>
@@ -154,8 +184,20 @@ const Home = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.navItem}
-          onPress={() => navigation.navigate('Profile')}>
-          <ProfileIcon width={24} height={24} />
+          onPress={() => navigation.navigate('MyProfile')}>
+          {avatar ? (
+            <Image
+              source={{uri: avatar}}
+              style={{
+                width: 24,
+                height: 24,
+                borderRadius: 12,
+                resizeMode: 'cover',
+              }}
+            />
+          ) : (
+            <ProfileIcon width={24} height={24} />
+          )}
           <Text style={styles.navText}>Profile</Text>
         </TouchableOpacity>
       </View>
@@ -174,10 +216,20 @@ const styles = StyleSheet.create({
   },
   logo: {marginRight: 12},
   headerTextWrap: {flex: 1, justifyContent: 'center'},
-  headerTitle: {color: '#fff', fontSize: 18, fontWeight: 'bold', marginBottom: 2},
+  headerTitle: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 2,
+  },
   headerHi: {color: '#fff', fontSize: 14},
   avatar: {
-    width: 38, height: 38, borderRadius: 19, borderWidth: 2, borderColor: '#fff', marginLeft: 10,
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    borderWidth: 2,
+    borderColor: '#fff',
+    marginLeft: 10,
   },
   menuCard: {
     backgroundColor: '#fff',
@@ -196,11 +248,27 @@ const styles = StyleSheet.create({
   menuList: {flexDirection: 'row', alignItems: 'center'},
   menuItemWrapper: {alignItems: 'center', marginHorizontal: 16},
   menuIconCircle: {
-    width: 54, height: 54, borderRadius: 12, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center',
-    marginBottom: 6, borderWidth: 1, borderColor: '#E5E5E5',
-    shadowColor: '#000', shadowOpacity: 1, shadowOffset: {width: 1, height: 1}, shadowRadius: 4, elevation: 2,
+    width: 54,
+    height: 54,
+    borderRadius: 12,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 6,
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+    shadowColor: '#000',
+    shadowOpacity: 1,
+    shadowOffset: {width: 1, height: 1},
+    shadowRadius: 4,
+    elevation: 2,
   },
-  menuLabel: {fontSize: 10, color: '#222', fontWeight: 'bold', textAlign: 'center'},
+  menuLabel: {
+    fontSize: 10,
+    color: '#222',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
   sectionCardBlue: {
     backgroundColor: '#174BA7',
     borderRadius: 20,
@@ -208,7 +276,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingVertical: 16,
   },
-  sectionTitleWhite: {fontSize: 18, fontWeight: 'bold', color: '#fff', marginLeft: 16, marginBottom: 12},
+  sectionTitleWhite: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginLeft: 16,
+    marginBottom: 12,
+  },
   arrivalsList: {paddingLeft: 16, paddingBottom: 8},
   arrivalCard: {
     backgroundColor: '#fff',
@@ -225,7 +299,12 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     resizeMode: 'cover',
   },
-  arrivalTitle: {fontSize: 14, color: '#222', fontWeight: 'bold', textAlign: 'center'},
+  arrivalTitle: {
+    fontSize: 14,
+    color: '#222',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
   sectionCardWhite: {
     backgroundColor: '#fff',
     borderRadius: 20,
@@ -234,23 +313,56 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 16,
   },
-  sectionTitleBlack: {fontSize: 18, fontWeight: 'bold', color: '#222', marginBottom: 12},
+  sectionTitleBlack: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#222',
+    marginBottom: 12,
+  },
   borrowedCardInner: {flexDirection: 'row', alignItems: 'flex-start'},
   borrowedImage: {borderRadius: 8, marginRight: 14},
   borrowedInfo: {flex: 1},
-  borrowedLabel: {fontSize: 12, color: '#888', fontWeight: 'bold', marginTop: 4},
+  borrowedLabel: {
+    fontSize: 12,
+    color: '#888',
+    fontWeight: 'bold',
+    marginTop: 4,
+  },
   borrowedValue: {fontSize: 13, color: '#222', fontWeight: 'bold'},
   bottomNav: {
-    flexDirection: 'row', backgroundColor: '#fff',
-    borderTopLeftRadius: 18, borderTopRightRadius: 18,
-    paddingVertical: 8, paddingHorizontal: 8,
-    position: 'absolute', left: 0, right: 0, bottom: 0,
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 18,
+    borderTopRightRadius: 18,
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
     justifyContent: 'space-between',
-    shadowColor: '#000', shadowOpacity: 0.06, shadowOffset: {width: 0, height: -2}, shadowRadius: 4, elevation: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.06,
+    shadowOffset: {width: 0, height: -2},
+    shadowRadius: 4,
+    elevation: 8,
   },
-  navItem: {flex: 1, marginHorizontal: 4, backgroundColor: 'transparent', borderRadius: 10, paddingVertical: 6, alignItems: 'center'},
+  navItem: {
+    flex: 1,
+    marginHorizontal: 4,
+    backgroundColor: 'transparent',
+    borderRadius: 10,
+    paddingVertical: 6,
+    alignItems: 'center',
+  },
   activeNavItem: {backgroundColor: '#E5F0FF'},
-  navText: {color: '#174BA7', fontWeight: 'bold', fontSize: 12, textAlign: 'center', marginTop: 2},
+  navText: {
+    color: '#174BA7',
+    fontWeight: 'bold',
+    fontSize: 12,
+    textAlign: 'center',
+    marginTop: 2,
+  },
   activeNavText: {color: '#174BA7', fontWeight: 'bold'},
 });
 

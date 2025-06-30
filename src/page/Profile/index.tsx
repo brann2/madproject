@@ -61,8 +61,9 @@ const Profile = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                 },
-              ]}
-            />
+              ]}>
+              <Text style={{fontSize: 32}}>👤</Text>
+            </View>
           )}
           <View style={styles.settingIcon}>
             <Text style={{fontSize: 18}}>⚙️</Text>
